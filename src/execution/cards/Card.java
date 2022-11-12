@@ -1,5 +1,8 @@
 package execution.cards;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.util.ArrayList;
 
 public abstract class Card {
@@ -28,7 +31,10 @@ public abstract class Card {
         return this.ownerIdx;
     }
 
+    public int getMana() { return this.mana; }
+
     public void setOwnerIdx(int ownerIdx) {
         this.ownerIdx = ownerIdx;
     }
+    public abstract ObjectNode toObjectNode(ObjectMapper objectMapper);
 }

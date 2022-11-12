@@ -16,9 +16,8 @@ public class MinionCard_Goliath extends MinionCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, Card card) {
+    protected String useAbility(Game game, Card card) {
         // This should never be reached!
-        System.out.println("CRITICAL: Goliath has NO ability implemented.");
-        return false;
+        return "CRITICAL: Goliath has NO ability implemented.";
     }
 }

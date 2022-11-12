@@ -15,13 +15,13 @@ public class HeroCard_KingMudface extends HeroCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, int row) {
+    protected String useAbility(Game game, int row) {
         MinionCard[] cards = game.getBoardRow(row);
         for (MinionCard card : cards) {
             if (card != null) {
                 card.setHealth(card.getHealth() + 1);
             }
         }
-        return false;
+        return null;
     }
 }

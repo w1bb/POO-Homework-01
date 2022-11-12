@@ -13,7 +13,7 @@ public class EnvironmentCard_HeartHound extends EnvironmentCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, int row) {
+    protected String useAbility(Game game, int row) {
         MinionCard[] cardsEnemy = game.getBoardRow(row);
         MinionCard[] cardsAlly = game.getBoardRow(3 - row);
         MinionCard cardToMove = null;
@@ -35,10 +35,9 @@ public class EnvironmentCard_HeartHound extends EnvironmentCard {
             if (cardsAlly[i] == null) {
                 game.addCardOnBoard(cardToMove, 3 - row, i);
                 game.removeCardOnBoard(row, i);
-                return true;
+                return null;
             }
         }
-        System.out.println("Cannot steal enemy card since the player's row is full.");
-        return false;
+        return "Cannot steal enemy card since the player's row is full.";
     }
 }

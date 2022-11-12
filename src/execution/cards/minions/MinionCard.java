@@ -1,8 +1,12 @@
 package execution.cards.minions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import execution.Game;
 import execution.cards.Card;
 import execution.cards.heros.HeroCard;
+import fileio.CardInput;
 
 import java.util.ArrayList;
 
@@ -51,6 +55,8 @@ public abstract class MinionCard extends Card {
         this.frozenStatus = true;
     }
 
+    public Boolean isFrozen() { return this.frozenStatus; }
+
     public Boolean isTank() {
         return this.tankStatus;
     }
@@ -69,88 +75,99 @@ public abstract class MinionCard extends Card {
         this.attackDamage = attackDamage;
     }
 
-    public Boolean tryUseAbility(Game game, Card card) {
+    public String tryUseAbility(Game game, Card card) {
         if (card.getCardType() != 1) {
             // This should never be reached!
-            System.out.println("CRITICAL: Can only use attack on minion cards.");
-            return false;
+            return "CRITICAL: Can only use attack on minion cards.";
         }
         if (this.frozenStatus) {
-            System.out.println("Attacker card is frozen.");
-            return false;
+            return "Attacker card is frozen.";
         }
         if (this.attackCountOnRound > 0 || this.abilityCountOnRound > 0) {
-            System.out.println("Attacker card has already attacked this turn.");
-            return false;
+            return "Attacker card has already attacked this turn.";
         }
         if ((this.ownerIdx != card.getOwnerIdx()) && !this.allowAbilityOnEnemy) {
-            System.out.println("Attacked card does not belong to the current player.");
-            return false;
+            return "Attacked card does not belong to the current player.";
         }
         if (this.allowAbilityOnEnemy && !this.allowAttackOnSelf) {
             if (this.ownerIdx == card.getOwnerIdx()) {
-                System.out.println("Attacked card does not belong to the enemy.");
-                return false;
+                return "Attacked card does not belong to the enemy.";
             }
             if (game.isTankOnEnemyLane() && !((MinionCard)card).tankStatus) {
-                System.out.println("Attacked card is not of type 'Tank’.");
-                return false;
+                return "Attacked card is not of type 'Tank’.";
             }
         }
-        Boolean returnValue = useAbility(game, card);
-        ++this.abilityCountOnRound;
+        String returnValue = useAbility(game, card);
+        if (returnValue == null)
+            ++this.abilityCountOnRound;
         return returnValue;
     }
 
-    protected abstract Boolean useAbility(Game game, Card card);
+    protected abstract String useAbility(Game game, Card card);
 
-    public Boolean damage(int damagePoints) {
+    public void damage(int damagePoints) {
         this.health = Math.max(0, this.health - damagePoints);
-        return (this.health == 0);
     }
 
     public void destroy() {
         this.health = 0;
     }
 
-    public Boolean tryUseAttack(Game game, Card card) {
+    public String tryUseAttack(Game game, Card card) {
         if (card.getCardType() != 0 || card.getCardType() != 1) {
             // This should never be reached!
-            System.out.println("CRITICAL: Can only use attack on minion/hero cards.");
-            return false;
+            return "CRITICAL: Can only use attack on minion/hero cards.";
         }
         if (this.frozenStatus) {
-            System.out.println("Attacker card is frozen.");
-            return false;
+            return "Attacker card is frozen.";
         }
         if (this.attackCountOnRound > 0 || this.abilityCountOnRound > 0) {
-            System.out.println("Attacker card has already attacked this turn.");
-            return false;
+            return "Attacker card has already attacked this turn.";
         }
         if ((this.ownerIdx == card.getOwnerIdx()) && !this.allowAttackOnSelf) {
-            System.out.println("Attacked card does not belong to the enemy.");
-            return false;
+            return "Attacked card does not belong to the enemy.";
         }
         if ((this.ownerIdx != card.getOwnerIdx()) && this.allowAttackOnEnemy && game.isTankOnEnemyLane()) {
             if (card.getCardType() != 1 || (card.getCardType() == 1 && !((MinionCard)card).tankStatus)) {
-                System.out.println("Attacked card is not of type 'Tank’.");
-                return false;
+                return "Attacked card is not of type 'Tank’.";
             }
         }
-        Boolean returnValue = useAttack(card);
-        ++this.attackCountOnRound;
+        String returnValue = useAttack(card);
+        if (returnValue == null)
+            ++this.attackCountOnRound;
         return returnValue;
     }
 
-    protected Boolean useAttack(Card card) {
+    protected String useAttack(Card card) {
         if (card.getCardType() == 0) {
-            return ((HeroCard)card).damage(this.attackDamage);
+            ((HeroCard)card).damage(this.attackDamage);
+            return null;
         } else if (card.getCardType() == 1) {
-            return ((MinionCard)card).damage(this.attackDamage);
+            ((MinionCard)card).damage(this.attackDamage);
+            return null;
         } else {
             // This should never be reached! It might be a little redundant, but better be safe than sorry.
-            System.out.println("CRITICAL: Can only use attack on minion/hero cards.");
-            return false;
+            return "CRITICAL: Can only use attack on minion/hero cards.";
         }
     }
+
+    public ObjectNode toObjectNode(ObjectMapper objectMapper) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        objectNode.put("mana", this.mana);
+        objectNode.put("health", this.health);
+        objectNode.put("description", this.description);
+        objectNode.put("name", this.name);
+        objectNode.put("attackDamage", this.attackDamage);
+
+        ArrayNode colorsNode = objectMapper.createArrayNode();
+        for (String color : colors)
+            colorsNode.add(color);
+        objectNode.set("colors", colorsNode);
+
+        return objectNode;
+    }
+
+    public Boolean getAllowPlacementOnFrontRow() { return allowPlacementOnFrontRow; }
+
+    public Boolean allowPlacementOnBackRow() { return allowPlacementOnBackRow; }
 }

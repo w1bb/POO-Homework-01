@@ -13,13 +13,13 @@ public class EnvironmentCard_Winterfell extends EnvironmentCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, int row) {
+    protected String useAbility(Game game, int row) {
         MinionCard[] cards = game.getBoardRow(row);
         for (MinionCard card : cards) {
             if (card != null) {
                 card.freeze();
             }
         }
-        return false;
+        return null;
     }
 }

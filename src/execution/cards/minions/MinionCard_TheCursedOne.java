@@ -16,16 +16,15 @@ public class MinionCard_TheCursedOne extends MinionCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, Card card) {
+    protected String useAbility(Game game, Card card) {
         if (card.getCardType() != 1) {
             // This should never be reached!
-            System.out.println("CRITICAL: Can only use ability on minion cards.");
-            return false;
+            return "CRITICAL: Can only use ability on minion cards.";
         }
         // Swap using xor
         ((MinionCard)card).attackDamage ^= ((MinionCard)card).health;
         ((MinionCard)card).health ^= ((MinionCard)card).attackDamage;
         ((MinionCard)card).attackDamage ^= ((MinionCard)card).health;
-        return (((MinionCard)card).health == 0);
+        return null;
     }
 }

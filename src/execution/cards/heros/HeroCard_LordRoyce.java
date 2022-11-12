@@ -15,7 +15,7 @@ public class HeroCard_LordRoyce extends HeroCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, int row) {
+    protected String useAbility(Game game, int row) {
         MinionCard[] cards = game.getBoardRow(row);
         MinionCard cardToChange = null;
         for (MinionCard card : cards) {
@@ -28,10 +28,9 @@ public class HeroCard_LordRoyce extends HeroCard {
         }
         if (cardToChange == null) {
             // This should never be reached
-            System.out.println("CRITICAL: Lord Royce has nothing to freeze!");
-            return false;
+            return "CRITICAL: Lord Royce has nothing to freeze!";
         }
         cardToChange.freeze();
-        return true;
+        return null;
     }
 }

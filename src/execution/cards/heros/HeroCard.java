@@ -1,9 +1,13 @@
 package execution.cards.heros;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import execution.Game;
 import execution.Player;
 import execution.cards.Card;
 import execution.cards.minions.MinionCard;
+import fileio.CardInput;
 
 import java.util.ArrayList;
 
@@ -29,27 +33,39 @@ public abstract class HeroCard extends Card {
         return (this.health == 0);
     }
 
-    public Boolean tryUseAbility(Game game, int row, Player player) {
+    public String tryUseAbility(Game game, int row, Player player) {
         if (player.getMana() < this.mana) {
-            System.out.println("Not enough mana to use hero's ability.");
-            return false;
+            return "Not enough mana to use hero's ability.";
         }
         if (this.abilityCountOnRound > 0) {
-            System.out.println("Hero has already attacked this turn.");
-            return false;
+            return "Hero has already attacked this turn.";
         }
         if (game.isPlayersRow(player, row) && !this.allowAbilityOnSelf) {
-            System.out.println("Selected row does not belong to the enemy.");
-            return false;
+            return "Selected row does not belong to the enemy.";
         }
         if (!game.isPlayersRow(player, row) && !this.allowAbilityOnEnemy) {
-            System.out.println("Selected row does not belong to the current player.");
-            return false;
+            return "Selected row does not belong to the current player.";
         }
-        Boolean returnValue = useAbility(game, row);
-        ++this.abilityCountOnRound;
+        String returnValue = useAbility(game, row);
+        if (returnValue == null)
+            ++this.abilityCountOnRound;
         return returnValue;
     }
 
-    protected abstract Boolean useAbility(Game game, int row);
+    protected abstract String useAbility(Game game, int row);
+
+    public ObjectNode toObjectNode(ObjectMapper objectMapper) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        objectNode.put("mana", this.mana);
+        objectNode.put("health", this.health);
+        objectNode.put("description", this.description);
+        objectNode.put("name", this.name);
+
+        ArrayNode colorsNode = objectMapper.createArrayNode();
+        for (String color : colors)
+            colorsNode.add(color);
+        objectNode.set("colors", colorsNode);
+
+        return objectNode;
+    }
 }

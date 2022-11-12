@@ -1,5 +1,8 @@
 package execution.cards.environments;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import execution.Game;
 import execution.Player;
 import execution.cards.Card;
@@ -17,18 +20,34 @@ public abstract class EnvironmentCard extends Card {
         this.allowAbilityOnSelf = allowAbilityOnSelf;
     }
 
-    public Boolean tryUseAbility(Game game, int row) {
+    public String tryUseAbility(Game game, int row) {
         Player player = game.getCurrentPlayer();
         if (player.getMana() < this.mana) {
-            System.out.println("Not enough mana to use hero's ability.");
-            return false;
+            return "Not enough mana to use hero's ability.";
         }
         if (game.isPlayersRow(player, row) && !this.allowAbilityOnSelf) {
-            System.out.println("Chosen row does not belong to the enemy.");
-            return false;
+            return "Chosen row does not belong to the enemy.";
         }
-        return useAbility(game, row);
+        String returnValue = useAbility(game, row);
+        if (returnValue == null)
+            player.setMana(player.getMana() - this.mana);
+        return returnValue;
     }
 
-    protected abstract Boolean useAbility(Game game, int row);
+    protected abstract String useAbility(Game game, int row);
+
+    @Override
+    public ObjectNode toObjectNode(ObjectMapper objectMapper) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        objectNode.put("mana", this.mana);
+        objectNode.put("name", this.name);
+        objectNode.put("description", this.description);
+
+        ArrayNode colorsNode = objectMapper.createArrayNode();
+        for (String color : colors)
+            colorsNode.add(color);
+        objectNode.set("colors", colorsNode);
+
+        return objectNode;
+    }
 }

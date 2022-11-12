@@ -13,15 +13,13 @@ public class EnvironmentCard_Firestorm extends EnvironmentCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, int row) {
+    protected String useAbility(Game game, int row) {
         MinionCard[] cards = game.getBoardRow(row);
-        boolean returnValue = false;
         for (MinionCard card : cards) {
             if (card != null) {
                 card.setHealth(card.getHealth() - 1);
-                returnValue |= (card.getHealth() == 0);
             }
         }
-        return returnValue;
+        return null;
     }
 }

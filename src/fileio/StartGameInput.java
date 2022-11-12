@@ -1,5 +1,9 @@
 package fileio;
 
+import execution.Game;
+import execution.Player;
+import execution.cards.heros.HeroCard;
+
 public final class StartGameInput {
     private int playerOneDeckIdx;
     private int playerTwoDeckIdx;
@@ -9,6 +13,13 @@ public final class StartGameInput {
     private int startingPlayer;
 
     public StartGameInput() {
+    }
+
+    public Game getGame(Player[] players) {
+        HeroCard playerOneHeroCard = (HeroCard)playerOneHero.toCard(0);
+        HeroCard playerTwoHeroCard = (HeroCard)playerTwoHero.toCard(1);
+        return new Game(players, startingPlayer, playerOneDeckIdx, playerTwoDeckIdx, shuffleSeed,
+                playerOneHeroCard, playerTwoHeroCard);
     }
 
     public int getPlayerOneDeckIdx() {

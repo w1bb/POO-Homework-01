@@ -1,5 +1,15 @@
 package fileio;
 
+import execution.cards.Card;
+import execution.cards.environments.EnvironmentCard_Firestorm;
+import execution.cards.environments.EnvironmentCard_HeartHound;
+import execution.cards.environments.EnvironmentCard_Winterfell;
+import execution.cards.heros.HeroCard_EmpressThorina;
+import execution.cards.heros.HeroCard_GeneralKocioraw;
+import execution.cards.heros.HeroCard_KingMudface;
+import execution.cards.heros.HeroCard_LordRoyce;
+import execution.cards.minions.*;
+
 import java.util.ArrayList;
 
 public final class CardInput {
@@ -9,6 +19,44 @@ public final class CardInput {
     private String description;
     private ArrayList<String> colors;
     private String name;
+
+    public Card toCard(int ownerIdx) {
+        switch (name) {
+            case "Firestorm":
+                return new EnvironmentCard_Firestorm(description, colors, mana, ownerIdx);
+            case "Heart Hound":
+                return new EnvironmentCard_HeartHound(description, colors, mana, ownerIdx);
+            case "Winterfell":
+                return new EnvironmentCard_Winterfell(description, colors, mana, ownerIdx);
+            case "Empress Thorina":
+                return new HeroCard_EmpressThorina(description, colors, mana, ownerIdx);
+            case "General Kocioraw":
+                return new HeroCard_GeneralKocioraw(description, colors, mana, ownerIdx);
+            case "King Mudface":
+                return new HeroCard_KingMudface(description, colors, mana, ownerIdx);
+            case "Lord Royce":
+                return new HeroCard_LordRoyce(description, colors, mana, ownerIdx);
+            case "Berserker":
+                return new MinionCard_Berserker(description, colors, mana, ownerIdx, health, attackDamage);
+            case "Disciple":
+                return new MinionCard_Disciple(description, colors, mana, ownerIdx, health);
+            case "Goliath":
+                return new MinionCard_Goliath(description, colors, mana, ownerIdx, health, attackDamage);
+            case "Miraj":
+                return new MinionCard_Miraj(description, colors, mana, ownerIdx, health, attackDamage);
+            case "Sentinel":
+                return new MinionCard_Sentinel(description, colors, mana, ownerIdx, health, attackDamage);
+            case "The Cursed One":
+                return new MinionCard_TheCursedOne(description, colors, mana, ownerIdx, health);
+            case "The Ripper":
+                return new MinionCard_TheRipper(description, colors, mana, ownerIdx, health, attackDamage);
+            case "Warden":
+                return new MinionCard_Warden(description, colors, mana, ownerIdx, health, attackDamage);
+        }
+        // This should never be reached!
+        System.out.println("CRITICAL: An invalid card was read (" + name + ")!");
+        return null;
+    }
 
     public CardInput() {
     }

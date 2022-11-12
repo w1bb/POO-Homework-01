@@ -1,5 +1,9 @@
 package fileio;
 
+import execution.Player;
+import execution.cards.Card;
+import execution.cards.Deck;
+
 import java.util.ArrayList;
 
 public final class DecksInput {
@@ -8,6 +12,17 @@ public final class DecksInput {
     private ArrayList<ArrayList<CardInput>> decks;
 
     public DecksInput() {
+    }
+
+    public ArrayList<Deck> getArrayOfDeck(int ownerIdx) {
+        ArrayList<Deck> decksReturn = new ArrayList<>();
+        for (int deckIdx = 0; deckIdx < decks.size(); ++deckIdx) {
+            ArrayList<Card> cards = new ArrayList<>();
+            for (CardInput cardInput : decks.get(deckIdx))
+                cards.add(cardInput.toCard(ownerIdx));
+            decksReturn.add(new Deck(deckIdx, ownerIdx, cards));
+        }
+        return decksReturn;
     }
 
     public int getNrCardsInDeck() {

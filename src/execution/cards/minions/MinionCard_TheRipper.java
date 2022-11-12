@@ -16,14 +16,13 @@ public class MinionCard_TheRipper extends MinionCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, Card card) {
+    protected String useAbility(Game game, Card card) {
         if (card.getCardType() != 1) {
             // This should never be reached!
-            System.out.println("CRITICAL: Can only use ability on minion cards.");
-            return false;
+            return "CRITICAL: Can only use ability on minion cards.";
         }
         // Remove 2 AD from the card
         ((MinionCard)card).attackDamage = Math.max(((MinionCard)card).attackDamage - 2, 0);
-        return false;
+        return null;
     }
 }

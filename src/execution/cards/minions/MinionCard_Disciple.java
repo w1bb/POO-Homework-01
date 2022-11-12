@@ -16,13 +16,12 @@ public class MinionCard_Disciple extends MinionCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, Card card) {
+    protected String useAbility(Game game, Card card) {
         if (card.getCardType() != 1) {
             // This should never be reached!
-            System.out.println("CRITICAL: Can only use ability on minion cards.");
-            return false;
+            return "CRITICAL: Can only use ability on minion cards.";
         }
         ((MinionCard)card).health += 2;
-        return false;
+        return null;
     }
 }

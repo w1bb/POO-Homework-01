@@ -15,13 +15,13 @@ public class HeroCard_GeneralKocioraw extends HeroCard {
     }
 
     @Override
-    protected Boolean useAbility(Game game, int row) {
+    protected String useAbility(Game game, int row) {
         MinionCard[] cards = game.getBoardRow(row);
         for (MinionCard card : cards) {
             if (card != null) {
                 card.setAttackDamage(card.getAttackDamage() + 1);
             }
         }
-        return false;
+        return null;
     }
 }
