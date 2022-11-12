@@ -8,7 +8,7 @@ public abstract class Card {
     protected final ArrayList<String> colors;
     protected final int mana;
     protected final int cardType;
-    protected final int ownerIdx;
+    protected int ownerIdx;
 
     public Card(String name, String description, ArrayList<String> colors,
                 int mana, int cardType, int ownerIdx) {
@@ -26,5 +26,9 @@ public abstract class Card {
 
     public int getOwnerIdx() {
         return this.ownerIdx;
+    }
+
+    public void setOwnerIdx(int ownerIdx) {
+        this.ownerIdx = ownerIdx;
     }
 }

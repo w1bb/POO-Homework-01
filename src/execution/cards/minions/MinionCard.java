@@ -92,7 +92,7 @@ public abstract class MinionCard extends Card {
                 System.out.println("Attacked card does not belong to the enemy.");
                 return false;
             }
-            if (game.isTankOnBoard() && !((MinionCard)card).tankStatus) {
+            if (game.isTankOnEnemyLane() && !((MinionCard)card).tankStatus) {
                 System.out.println("Attacked card is not of type 'Tank’.");
                 return false;
             }
@@ -131,7 +131,7 @@ public abstract class MinionCard extends Card {
             System.out.println("Attacked card does not belong to the enemy.");
             return false;
         }
-        if ((this.ownerIdx != card.getOwnerIdx()) && this.allowAttackOnEnemy && game.isTankOnBoard()) {
+        if ((this.ownerIdx != card.getOwnerIdx()) && this.allowAttackOnEnemy && game.isTankOnEnemyLane()) {
             if (card.getCardType() != 1 || (card.getCardType() == 1 && !((MinionCard)card).tankStatus)) {
                 System.out.println("Attacked card is not of type 'Tank’.");
                 return false;
