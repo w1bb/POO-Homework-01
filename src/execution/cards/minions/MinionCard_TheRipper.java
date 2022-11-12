@@ -22,6 +22,7 @@ public class MinionCard_TheRipper extends MinionCard {
             System.out.println("CRITICAL: Can only use ability on minion cards.");
             return false;
         }
+        // Remove 2 AD from the card
         ((MinionCard)card).attackDamage = Math.max(((MinionCard)card).attackDamage - 2, 0);
         return false;
     }
