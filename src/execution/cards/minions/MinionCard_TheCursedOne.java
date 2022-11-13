@@ -28,4 +28,10 @@ public class MinionCard_TheCursedOne extends MinionCard {
         ((MinionCard)card).attackDamage ^= ((MinionCard)card).health;
         return ErrorType.NO_ERROR;
     }
+
+    @Override
+    public Card copy() {
+        return new MinionCard_TheCursedOne(this.description, this.colors, this.mana,
+                this.ownerIdx, this.health);
+    }
 }

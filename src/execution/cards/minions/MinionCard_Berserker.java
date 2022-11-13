@@ -3,6 +3,7 @@ package execution.cards.minions;
 import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
+import execution.cards.heros.HeroCard_LordRoyce;
 
 import java.util.ArrayList;
 
@@ -20,5 +21,11 @@ public class MinionCard_Berserker extends MinionCard {
     protected ErrorType useAbility(Game game, Card card) {
         // This should never be reached!
         return ErrorType.CRITICAL_BERSERKER_NO_ABILITY;
+    }
+
+    @Override
+    public Card copy() {
+        return new MinionCard_Berserker(this.description, this.colors, this.mana,
+                this.ownerIdx, this.health, this.attackDamage);
     }
 }

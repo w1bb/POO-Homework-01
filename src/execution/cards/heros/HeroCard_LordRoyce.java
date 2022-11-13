@@ -2,6 +2,7 @@ package execution.cards.heros;
 
 import execution.ErrorType;
 import execution.Game;
+import execution.cards.Card;
 import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
@@ -33,5 +34,10 @@ public class HeroCard_LordRoyce extends HeroCard {
         }
         cardToChange.freeze();
         return ErrorType.NO_ERROR;
+    }
+
+    @Override
+    public Card copy() {
+        return new HeroCard_LordRoyce(this.description, this.colors, this.mana, this.ownerIdx);
     }
 }

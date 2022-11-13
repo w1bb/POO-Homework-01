@@ -30,7 +30,9 @@ public class Deck {
     }
 
     public Card drawCard() {
-        Card card = shuffledCards.get(currentIndex);
+        if (currentIndex >= shuffledCards.size())
+            return null;
+        Card card = shuffledCards.get(currentIndex).copy();
         currentIndex++;
         return card;
     }

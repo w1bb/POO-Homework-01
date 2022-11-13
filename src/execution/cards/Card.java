@@ -37,4 +37,6 @@ public abstract class Card {
         this.ownerIdx = ownerIdx;
     }
     public abstract ObjectNode toObjectNode(ObjectMapper objectMapper);
+
+    public abstract Card copy();
 }

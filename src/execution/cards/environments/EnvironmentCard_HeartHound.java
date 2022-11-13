@@ -2,6 +2,7 @@ package execution.cards.environments;
 
 import execution.ErrorType;
 import execution.Game;
+import execution.cards.Card;
 import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
@@ -40,5 +41,10 @@ public class EnvironmentCard_HeartHound extends EnvironmentCard {
             }
         }
         return ErrorType.ERROR_BOARD_ROW_FULL;
+    }
+
+    @Override
+    public Card copy() {
+        return new EnvironmentCard_HeartHound(this.description, this.colors, this.mana, this.ownerIdx);
     }
 }

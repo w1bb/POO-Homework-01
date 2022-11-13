@@ -182,4 +182,6 @@ public abstract class MinionCard extends Card {
     public void setAbilityCountOnRound(int abilityCountOnRound) {
         this.abilityCountOnRound = abilityCountOnRound;
     }
+
+    public abstract Card copy();
 }

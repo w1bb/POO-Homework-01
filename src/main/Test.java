@@ -30,7 +30,7 @@ public final class Test {
             Arrays.sort(inputDir);
 
 //            Scanner scanner = new Scanner(System.in);
-            String fileName = "test07_attack_card_invalid.json";
+            String fileName = "test15_use_hero_ability_2_invalid.json";
             for (File file : inputDir) {
                 if (file.getName().equalsIgnoreCase(fileName)) {
                     Main.action(file.getName(), CheckerConstants.OUT_FILE);

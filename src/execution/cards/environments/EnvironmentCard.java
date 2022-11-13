@@ -51,4 +51,6 @@ public abstract class EnvironmentCard extends Card {
 
         return objectNode;
     }
+
+    public abstract Card copy();
 }

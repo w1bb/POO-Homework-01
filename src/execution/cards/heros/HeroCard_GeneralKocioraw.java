@@ -2,6 +2,7 @@ package execution.cards.heros;
 
 import execution.ErrorType;
 import execution.Game;
+import execution.cards.Card;
 import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
@@ -24,5 +25,10 @@ public class HeroCard_GeneralKocioraw extends HeroCard {
             }
         }
         return ErrorType.NO_ERROR;
+    }
+
+    @Override
+    public Card copy() {
+        return new HeroCard_GeneralKocioraw(this.description, this.colors, this.mana, this.ownerIdx);
     }
 }

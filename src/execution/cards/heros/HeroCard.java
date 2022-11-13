@@ -7,6 +7,7 @@ import execution.ErrorType;
 import execution.Game;
 import execution.Player;
 import execution.cards.Card;
+import execution.cards.environments.EnvironmentCard_Winterfell;
 
 import java.util.ArrayList;
 
@@ -47,8 +48,10 @@ public abstract class HeroCard extends Card {
             return ErrorType.ERROR_SELECTED_ROW_NOT_ALLY;
         }
         ErrorType returnValue = useAbility(game, row);
-        if (returnValue == ErrorType.NO_ERROR)
+        if (returnValue == ErrorType.NO_ERROR) {
             ++this.abilityCountOnRound;
+            player.setMana(player.getMana() - this.mana);
+        }
         return returnValue;
     }
 
@@ -74,4 +77,6 @@ public abstract class HeroCard extends Card {
     public void setAbilityCountOnRound(int abilityCountOnRound) {
         this.abilityCountOnRound = abilityCountOnRound;
     }
+
+    public abstract Card copy();
 }

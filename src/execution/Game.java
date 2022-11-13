@@ -64,6 +64,8 @@ public class Game {
                 }
             }
         }
+        players[0].getHeroCard().setAbilityCountOnRound(0);
+        players[1].getHeroCard().setAbilityCountOnRound(0);
         currentRound++;
     }
 

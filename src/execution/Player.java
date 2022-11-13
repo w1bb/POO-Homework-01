@@ -35,8 +35,10 @@ public class Player {
 
     public void drawCard() {
         Card drawnCard = currentDeck.drawCard();
-        drawnCard.setOwnerIdx(this.playerIdx);
-        this.currentHand.add(drawnCard);
+        if (drawnCard != null) {
+            drawnCard.setOwnerIdx(this.playerIdx);
+            this.currentHand.add(drawnCard);
+        }
     }
 
     public Card dropCardFromHand(int handIdx) {

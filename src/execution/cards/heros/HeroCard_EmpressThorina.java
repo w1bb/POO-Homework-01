@@ -2,6 +2,8 @@ package execution.cards.heros;
 
 import execution.ErrorType;
 import execution.Game;
+import execution.cards.Card;
+import execution.cards.environments.EnvironmentCard_HeartHound;
 import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
@@ -33,5 +35,10 @@ public class HeroCard_EmpressThorina extends HeroCard {
         }
         cardToChange.destroy();
         return ErrorType.NO_ERROR;
+    }
+
+    @Override
+    public Card copy() {
+        return new HeroCard_EmpressThorina(this.description, this.colors, this.mana, this.ownerIdx);
     }
 }

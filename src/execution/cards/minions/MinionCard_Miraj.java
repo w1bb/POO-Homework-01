@@ -28,4 +28,10 @@ public class MinionCard_Miraj extends MinionCard {
         this.health ^= ((MinionCard)card).health;
         return ErrorType.NO_ERROR;
     }
+
+    @Override
+    public Card copy() {
+        return new MinionCard_Miraj(this.description, this.colors, this.mana,
+                this.ownerIdx, this.health, this.attackDamage);
+    }
 }

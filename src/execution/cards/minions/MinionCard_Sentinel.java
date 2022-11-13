@@ -21,4 +21,10 @@ public class MinionCard_Sentinel extends MinionCard {
         // This should never be reached!
         return ErrorType.CRITICAL_SENTINEL_NO_ABILITY;
     }
+
+    @Override
+    public Card copy() {
+        return new MinionCard_Sentinel(this.description, this.colors, this.mana,
+                this.ownerIdx, this.health, this.attackDamage);
+    }
 }

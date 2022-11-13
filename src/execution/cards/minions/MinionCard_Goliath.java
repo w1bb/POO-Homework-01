@@ -21,4 +21,10 @@ public class MinionCard_Goliath extends MinionCard {
         // This should never be reached!
         return ErrorType.CRITICAL_GOLIATH_NO_ABILITY;
     }
+
+    @Override
+    public Card copy() {
+        return new MinionCard_Goliath(this.description, this.colors, this.mana,
+                this.ownerIdx, this.health, this.attackDamage);
+    }
 }

@@ -25,4 +25,10 @@ public class MinionCard_Disciple extends MinionCard {
         ((MinionCard)card).health += 2;
         return ErrorType.NO_ERROR;
     }
+
+    @Override
+    public Card copy() {
+        return new MinionCard_Disciple(this.description, this.colors, this.mana,
+                this.ownerIdx, this.health);
+    }
 }

@@ -21,4 +21,10 @@ public class MinionCard_Warden extends MinionCard {
         // This should never be reached!
         return ErrorType.CRITICAL_WARDEN_NO_ABILITY;
     }
+
+    @Override
+    public Card copy() {
+        return new MinionCard_Warden(this.description, this.colors, this.mana,
+                this.ownerIdx, this.health, this.attackDamage);
+    }
 }

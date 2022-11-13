@@ -76,7 +76,7 @@ public class Interpreter {
                 objectNode.set("output", game.boardFrozenToArrayNode(objectMapper));
                 break;
             case "getTotalGamesPlayed":
-                objectNode.put("output", this.currentGame);
+                objectNode.put("output", this.currentGame + 1);
                 break;
             case "getPlayerOneWins":
                 objectNode.put("output", players[0].getWins());
@@ -143,6 +143,14 @@ public class Interpreter {
                 MinionCard attackedCard = game.getCard(attackedX, attackedY);
                 e = attackerCard.tryUseAbility(game, attackedCard);
                 if (e != ErrorType.NO_ERROR) {
+                    ObjectNode cardAttacker = objectMapper.createObjectNode();
+                    cardAttacker.put("x", attackerX);
+                    cardAttacker.put("y", attackerY);
+                    ObjectNode cardAttacked = objectMapper.createObjectNode();
+                    cardAttacked.put("x", attackedX);
+                    cardAttacked.put("y", attackedY);
+                    objectNode.set("cardAttacker", cardAttacker);
+                    objectNode.set("cardAttacked", cardAttacked);
                     objectNode.put("error", e.interpret());
                     output.add(objectNode);
                 }
@@ -152,20 +160,25 @@ public class Interpreter {
             case "useAttackHero" -> {
                 int attackerY = actionsInput.getCardAttacker().getY();
                 int attackerX = actionsInput.getCardAttacker().getX();
-                MinionCard attackerCard = game.getCard(attackerY, attackerX);
+                MinionCard attackerCard = game.getCard(attackerX, attackerY);
                 HeroCard attackedCard = game.getNextPlayer().getHeroCard();
                 e = attackerCard.tryUseAttack(game, attackedCard);
                 if (e != ErrorType.NO_ERROR) {
+                    ObjectNode cardAttacker = objectMapper.createObjectNode();
+                    cardAttacker.put("x", attackerX);
+                    cardAttacker.put("y", attackerY);
+                    objectNode.set("cardAttacker", cardAttacker);
                     objectNode.put("error", e.interpret());
                     output.add(objectNode);
                 }
                 else if (game.isOver()) {
+                    objectNode = objectMapper.createObjectNode();
                     if (players[0].getHeroCard().getHealth() > 0) {
-                        objectNode.put("gameEnded", "layer one killed the enemy hero.");
+                        objectNode.put("gameEnded", "Player one killed the enemy hero.");
                         output.add(objectNode);
                     }
                     else {
-                        objectNode.put("gameEnded", "layer two killed the enemy hero.");
+                        objectNode.put("gameEnded", "Player two killed the enemy hero.");
                         output.add(objectNode);
                     }
                 }
@@ -177,6 +190,7 @@ public class Interpreter {
                 HeroCard attackerCard = game.getCurrentPlayer().getHeroCard();
                 e = attackerCard.tryUseAbility(game, row, game.getCurrentPlayer());
                 if (e != ErrorType.NO_ERROR) {
+                    objectNode.put("affectedRow", actionsInput.getAffectedRow());
                     objectNode.put("error", e.interpret());
                     output.add(objectNode);
                 }

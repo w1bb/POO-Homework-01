@@ -26,4 +26,10 @@ public class MinionCard_TheRipper extends MinionCard {
         ((MinionCard)card).attackDamage = Math.max(((MinionCard)card).attackDamage - 2, 0);
         return ErrorType.NO_ERROR;
     }
+
+    @Override
+    public Card copy() {
+        return new MinionCard_TheRipper(this.description, this.colors, this.mana,
+                this.ownerIdx, this.health, this.attackDamage);
+    }
 }
