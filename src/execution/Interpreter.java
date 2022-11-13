@@ -105,6 +105,7 @@ public class Interpreter {
                 e = game.getCurrentPlayer().placeCardOnBoard(actionsInput.getHandIdx(), game);
                 if (e != ErrorType.NO_ERROR) {
                     objectNode.put("error", e.interpret());
+                    objectNode.put("handIdx", actionsInput.getHandIdx());
                     output.add(objectNode);
                 }
                 game.redrawBoard();

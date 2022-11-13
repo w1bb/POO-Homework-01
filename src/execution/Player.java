@@ -69,8 +69,10 @@ public class Player {
                 e = game.pushOnBoardRow(minionCard, 3);
         }
         // ? Is this so?
-        if (e == ErrorType.NO_ERROR)
+        if (e == ErrorType.NO_ERROR) {
+            this.currentMana -= card.getMana();
             dropCardFromHand(handIdx);
+        }
         return e;
     }
 

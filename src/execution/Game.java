@@ -28,6 +28,8 @@ public class Game {
         this.board = new MinionCard[4][5];
         this.manaToAdd = 1;
         this.ended = false;
+
+        this.newRound();
     }
 
     public void endTurn() {
@@ -106,7 +108,7 @@ public class Game {
 
     public Boolean isPlayersRow(Player player, int row) {
         if (checkPlayerValidity(player) && checkRowValidity(row))
-            return (player == players[1]) ^ (initialPlayer == 1) ^ (row < 2);
+            return (player == players[1]) ^ (initialPlayer == 1) ^ (row >= 2);
         return null;
     }
 
@@ -142,10 +144,11 @@ public class Game {
                     board[row][column] = null;
                 if (board[row][column] != null) {
                     board[row][lastUnusedColumn] = board[row][column];
-                    board[row][column] = null;
                     lastUnusedColumn++;
                 }
             }
+            for (int column = lastUnusedColumn; column < 5; ++column)
+                board[row][column] = null;
         }
     }
 
@@ -159,13 +162,14 @@ public class Game {
 
     public ArrayNode boardToArrayNode(ObjectMapper objectMapper) {
         ArrayNode cardsInside = objectMapper.createArrayNode();
-        for (MinionCard[] rowBoard : board)
+        for (MinionCard[] rowBoard : board) {
+            ArrayNode cardsInsideRow = objectMapper.createArrayNode();
             for (MinionCard card : rowBoard) {
                 if (card != null)
-                    cardsInside.add(card.toObjectNode(objectMapper));
-                else
-                    cardsInside.add("None");
+                    cardsInsideRow.add(card.toObjectNode(objectMapper));
             }
+            cardsInside.add(cardsInsideRow);
+        }
         return cardsInside;
     }
 

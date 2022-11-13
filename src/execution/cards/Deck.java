@@ -37,8 +37,8 @@ public class Deck {
 
     public ArrayNode toArrayNode(ObjectMapper objectMapper) {
         ArrayNode cardsInside = objectMapper.createArrayNode();
-        for (Card card : orderedCards)
-            cardsInside.add(card.toObjectNode(objectMapper));
+        for (int i = currentIndex; i < shuffledCards.size(); ++i)
+            cardsInside.add(shuffledCards.get(i).toObjectNode(objectMapper));
         return cardsInside;
     }
 }
