@@ -3,6 +3,7 @@ package execution.cards.minions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
 import execution.cards.heros.HeroCard;
@@ -75,35 +76,35 @@ public abstract class MinionCard extends Card {
         this.attackDamage = attackDamage;
     }
 
-    public String tryUseAbility(Game game, Card card) {
+    public ErrorType tryUseAbility(Game game, Card card) {
         if (card.getCardType() != 1) {
             // This should never be reached!
-            return "CRITICAL: Can only use attack on minion cards.";
+            return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS;
         }
         if (this.frozenStatus) {
-            return "Attacker card is frozen.";
+            return ErrorType.ERROR_ATTACKER_FROZEN;
         }
         if (this.attackCountOnRound > 0 || this.abilityCountOnRound > 0) {
-            return "Attacker card has already attacked this turn.";
+            return ErrorType.ERROR_ATTACKER_ALREADY_ATTACKED;
         }
         if ((this.ownerIdx != card.getOwnerIdx()) && !this.allowAbilityOnEnemy) {
-            return "Attacked card does not belong to the current player.";
+            return ErrorType.ERROR_ATTACKER_NOT_ALLY;
         }
         if (this.allowAbilityOnEnemy && !this.allowAttackOnSelf) {
             if (this.ownerIdx == card.getOwnerIdx()) {
-                return "Attacked card does not belong to the enemy.";
+                return ErrorType.ERROR_ATTACKED_CARD_NOT_ENEMY;
             }
             if (game.isTankOnEnemyLane() && !((MinionCard)card).tankStatus) {
-                return "Attacked card is not of type 'Tank’.";
+                return ErrorType.ERROR_ATTACKED_CARD_NOT_TANK;
             }
         }
-        String returnValue = useAbility(game, card);
-        if (returnValue == null)
+        ErrorType returnValue = useAbility(game, card);
+        if (returnValue == ErrorType.NO_ERROR)
             ++this.abilityCountOnRound;
         return returnValue;
     }
 
-    protected abstract String useAbility(Game game, Card card);
+    protected abstract ErrorType useAbility(Game game, Card card);
 
     public void damage(int damagePoints) {
         this.health = Math.max(0, this.health - damagePoints);
@@ -113,42 +114,43 @@ public abstract class MinionCard extends Card {
         this.health = 0;
     }
 
-    public String tryUseAttack(Game game, Card card) {
+    public ErrorType tryUseAttack(Game game, Card card) {
         if (card.getCardType() != 0 || card.getCardType() != 1) {
             // This should never be reached!
-            return "CRITICAL: Can only use attack on minion/hero cards.";
+            return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS_HEROS;
         }
         if (this.frozenStatus) {
-            return "Attacker card is frozen.";
+            return ErrorType.ERROR_ATTACKER_FROZEN;
         }
         if (this.attackCountOnRound > 0 || this.abilityCountOnRound > 0) {
-            return "Attacker card has already attacked this turn.";
+            return ErrorType.ERROR_ATTACKER_ALREADY_ATTACKED;
         }
         if ((this.ownerIdx == card.getOwnerIdx()) && !this.allowAttackOnSelf) {
-            return "Attacked card does not belong to the enemy.";
+            return ErrorType.ERROR_ATTACKED_CARD_NOT_ENEMY;
         }
         if ((this.ownerIdx != card.getOwnerIdx()) && this.allowAttackOnEnemy && game.isTankOnEnemyLane()) {
             if (card.getCardType() != 1 || (card.getCardType() == 1 && !((MinionCard)card).tankStatus)) {
-                return "Attacked card is not of type 'Tank’.";
+                return ErrorType.ERROR_ATTACKED_CARD_NOT_TANK;
             }
         }
-        String returnValue = useAttack(card);
-        if (returnValue == null)
+        ErrorType returnValue = useAttack(card);
+        if (returnValue == ErrorType.NO_ERROR) {
             ++this.attackCountOnRound;
+            game.redrawBoard();
+        }
         return returnValue;
     }
 
-    protected String useAttack(Card card) {
+    protected ErrorType useAttack(Card card) {
         if (card.getCardType() == 0) {
             ((HeroCard)card).damage(this.attackDamage);
-            return null;
+            return ErrorType.NO_ERROR;
         } else if (card.getCardType() == 1) {
             ((MinionCard)card).damage(this.attackDamage);
-            return null;
-        } else {
-            // This should never be reached! It might be a little redundant, but better be safe than sorry.
-            return "CRITICAL: Can only use attack on minion/hero cards.";
+            return ErrorType.NO_ERROR;
         }
+        // This should never be reached! It might be a little redundant, but better be safe than sorry.
+        return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS_HEROS;
     }
 
     public ObjectNode toObjectNode(ObjectMapper objectMapper) {
@@ -169,5 +171,5 @@ public abstract class MinionCard extends Card {
 
     public Boolean getAllowPlacementOnFrontRow() { return allowPlacementOnFrontRow; }
 
-    public Boolean allowPlacementOnBackRow() { return allowPlacementOnBackRow; }
+    public Boolean getAllowPlacementOnBackRow() { return allowPlacementOnBackRow; }
 }

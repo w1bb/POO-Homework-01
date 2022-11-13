@@ -1,5 +1,6 @@
 package execution.cards.minions;
 
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
 
@@ -16,15 +17,15 @@ public class MinionCard_Miraj extends MinionCard {
     }
 
     @Override
-    protected String useAbility(Game game, Card card) {
+    protected ErrorType useAbility(Game game, Card card) {
         if (card.getCardType() != 1) {
             // This should never be reached!
-            return "CRITICAL: Can only use ability on minion cards.";
+            return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ABILITY_MINIONS;
         }
         // Swap using xor
         this.health ^= ((MinionCard)card).health;
         ((MinionCard)card).health ^= this.health;
         this.health ^= ((MinionCard)card).health;
-        return null;
+        return ErrorType.NO_ERROR;
     }
 }

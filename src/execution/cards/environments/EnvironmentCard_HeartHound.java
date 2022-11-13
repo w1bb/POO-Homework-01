@@ -1,5 +1,6 @@
 package execution.cards.environments;
 
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.minions.MinionCard;
 
@@ -13,7 +14,7 @@ public class EnvironmentCard_HeartHound extends EnvironmentCard {
     }
 
     @Override
-    protected String useAbility(Game game, int row) {
+    protected ErrorType useAbility(Game game, int row) {
         MinionCard[] cardsEnemy = game.getBoardRow(row);
         MinionCard[] cardsAlly = game.getBoardRow(3 - row);
         MinionCard cardToMove = null;
@@ -27,10 +28,10 @@ public class EnvironmentCard_HeartHound extends EnvironmentCard {
         }
         if (cardToMove == null) {
             // This should never be reached!
-            // TODO
-            return null;
+            return ErrorType.CRITICAL_HEART_HOUND_ABILITY_NO_CARD_TO_MOVE;
         }
         cardToMove.setOwnerIdx(3 - cardToMove.getOwnerIdx());
+        // TODO update
         for (int i = 0; i < cardsAlly.length; ++i) {
             if (cardsAlly[i] == null) {
                 game.addCardOnBoard(cardToMove, 3 - row, i);
@@ -38,6 +39,6 @@ public class EnvironmentCard_HeartHound extends EnvironmentCard {
                 return null;
             }
         }
-        return "Cannot steal enemy card since the player's row is full.";
+        return ErrorType.ERROR_BOARD_ROW_FULL;
     }
 }

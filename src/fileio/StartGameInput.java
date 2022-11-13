@@ -18,7 +18,7 @@ public final class StartGameInput {
     public Game getGame(Player[] players) {
         HeroCard playerOneHeroCard = (HeroCard)playerOneHero.toCard(0);
         HeroCard playerTwoHeroCard = (HeroCard)playerTwoHero.toCard(1);
-        return new Game(players, startingPlayer, playerOneDeckIdx, playerTwoDeckIdx, shuffleSeed,
+        return new Game(players, startingPlayer - 1, playerOneDeckIdx, playerTwoDeckIdx, shuffleSeed,
                 playerOneHeroCard, playerTwoHeroCard);
     }
 

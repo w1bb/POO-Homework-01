@@ -1,5 +1,6 @@
 package execution.cards.heros;
 
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.minions.MinionCard;
 
@@ -15,7 +16,7 @@ public class HeroCard_LordRoyce extends HeroCard {
     }
 
     @Override
-    protected String useAbility(Game game, int row) {
+    protected ErrorType useAbility(Game game, int row) {
         MinionCard[] cards = game.getBoardRow(row);
         MinionCard cardToChange = null;
         for (MinionCard card : cards) {
@@ -28,9 +29,9 @@ public class HeroCard_LordRoyce extends HeroCard {
         }
         if (cardToChange == null) {
             // This should never be reached
-            return "CRITICAL: Lord Royce has nothing to freeze!";
+            return ErrorType.CRITICAL_LORD_ROYCE_FREEZES_NOTHING;
         }
         cardToChange.freeze();
-        return null;
+        return ErrorType.NO_ERROR;
     }
 }

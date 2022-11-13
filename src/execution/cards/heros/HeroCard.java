@@ -3,11 +3,10 @@ package execution.cards.heros;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import execution.ErrorType;
 import execution.Game;
 import execution.Player;
 import execution.cards.Card;
-import execution.cards.minions.MinionCard;
-import fileio.CardInput;
 
 import java.util.ArrayList;
 
@@ -33,26 +32,26 @@ public abstract class HeroCard extends Card {
         return (this.health == 0);
     }
 
-    public String tryUseAbility(Game game, int row, Player player) {
+    public ErrorType tryUseAbility(Game game, int row, Player player) {
         if (player.getMana() < this.mana) {
-            return "Not enough mana to use hero's ability.";
+            return ErrorType.ERROR_INSUFFICIENT_MANA_FOR_HERO;
         }
         if (this.abilityCountOnRound > 0) {
-            return "Hero has already attacked this turn.";
+            return ErrorType.ERROR_HERO_ALREADY_ATTACKED;
         }
         if (game.isPlayersRow(player, row) && !this.allowAbilityOnSelf) {
-            return "Selected row does not belong to the enemy.";
+            return ErrorType.ERROR_SELECTED_ROW_NOT_ENEMY;
         }
         if (!game.isPlayersRow(player, row) && !this.allowAbilityOnEnemy) {
-            return "Selected row does not belong to the current player.";
+            return ErrorType.ERROR_SELECTED_ROW_NOT_ALLY;
         }
-        String returnValue = useAbility(game, row);
-        if (returnValue == null)
+        ErrorType returnValue = useAbility(game, row);
+        if (returnValue == ErrorType.NO_ERROR)
             ++this.abilityCountOnRound;
         return returnValue;
     }
 
-    protected abstract String useAbility(Game game, int row);
+    protected abstract ErrorType useAbility(Game game, int row);
 
     public ObjectNode toObjectNode(ObjectMapper objectMapper) {
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -68,4 +67,6 @@ public abstract class HeroCard extends Card {
 
         return objectNode;
     }
+
+    public int getHealth() { return this.health; }
 }

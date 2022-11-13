@@ -1,5 +1,6 @@
 package execution.cards.minions;
 
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
 
@@ -16,8 +17,8 @@ public class MinionCard_Goliath extends MinionCard {
     }
 
     @Override
-    protected String useAbility(Game game, Card card) {
+    protected ErrorType useAbility(Game game, Card card) {
         // This should never be reached!
-        return "CRITICAL: Goliath has NO ability implemented.";
+        return ErrorType.CRITICAL_GOLIATH_NO_ABILITY;
     }
 }

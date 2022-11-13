@@ -49,18 +49,29 @@ public class Player {
         return currentHand.get(handIdx);
     }
 
-    public String placeCardOnBoard(int handIdx, Game game) {
+    public ErrorType placeCardOnBoard(int handIdx, Game game) {
         Card card = getCardFromHand(handIdx);
         if (card.getCardType() == 2)
-            return "Cannot place environment card on table.";
+            return ErrorType.ERROR_PLACE_ENVIRONMENT_ON_BOARD;
         if (this.currentMana < card.getMana())
-            return "Not enough mana to place card on table.";
+            return ErrorType.ERROR_INSUFFICIENT_MANA_TO_PLACE;
         MinionCard minionCard = (MinionCard)card;
+        ErrorType e = ErrorType.NO_ERROR;
         if (minionCard.getAllowPlacementOnFrontRow()) {
             if (game.isPlayersRow(this.playerIdx, 1))
-
+                e = game.pushOnBoardRow(minionCard, 1);
+            else
+                e = game.pushOnBoardRow(minionCard, 2);
+        } else if (minionCard.getAllowPlacementOnBackRow()) {
+            if (game.isPlayersRow(this.playerIdx, 0))
+                e = game.pushOnBoardRow(minionCard, 0);
+            else
+                e = game.pushOnBoardRow(minionCard, 3);
         }
-        return null;
+        // ? Is this so?
+        if (e == ErrorType.NO_ERROR)
+            dropCardFromHand(handIdx);
+        return e;
     }
 
     public int getMana() {
@@ -98,7 +109,7 @@ public class Player {
         return this.wins;
     }
 
-    public void setWins(int wins) {
-        this.wins = wins;
+    public void addVictory() {
+        this.wins++;
     }
 }

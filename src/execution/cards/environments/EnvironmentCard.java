@@ -3,6 +3,7 @@ package execution.cards.environments;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import execution.ErrorType;
 import execution.Game;
 import execution.Player;
 import execution.cards.Card;
@@ -20,21 +21,19 @@ public abstract class EnvironmentCard extends Card {
         this.allowAbilityOnSelf = allowAbilityOnSelf;
     }
 
-    public String tryUseAbility(Game game, int row) {
+    public ErrorType tryUseAbility(Game game, int row) {
         Player player = game.getCurrentPlayer();
-        if (player.getMana() < this.mana) {
-            return "Not enough mana to use hero's ability.";
-        }
-        if (game.isPlayersRow(player, row) && !this.allowAbilityOnSelf) {
-            return "Chosen row does not belong to the enemy.";
-        }
-        String returnValue = useAbility(game, row);
-        if (returnValue == null)
+        if (player.getMana() < this.mana)
+            return ErrorType.ERROR_INSUFFICIENT_MANA_FOR_HERO;
+        if (game.isPlayersRow(player, row) && !this.allowAbilityOnSelf)
+            return ErrorType.ERROR_NOT_ENEMY_ROW;
+        ErrorType returnValue = useAbility(game, row);
+        if (returnValue == ErrorType.NO_ERROR)
             player.setMana(player.getMana() - this.mana);
         return returnValue;
     }
 
-    protected abstract String useAbility(Game game, int row);
+    protected abstract ErrorType useAbility(Game game, int row);
 
     @Override
     public ObjectNode toObjectNode(ObjectMapper objectMapper) {

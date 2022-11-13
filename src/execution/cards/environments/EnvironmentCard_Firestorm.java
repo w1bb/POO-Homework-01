@@ -1,5 +1,6 @@
 package execution.cards.environments;
 
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.minions.MinionCard;
 
@@ -13,13 +14,13 @@ public class EnvironmentCard_Firestorm extends EnvironmentCard {
     }
 
     @Override
-    protected String useAbility(Game game, int row) {
+    protected ErrorType useAbility(Game game, int row) {
         MinionCard[] cards = game.getBoardRow(row);
         for (MinionCard card : cards) {
             if (card != null) {
                 card.setHealth(card.getHealth() - 1);
             }
         }
-        return null;
+        return ErrorType.NO_ERROR;
     }
 }

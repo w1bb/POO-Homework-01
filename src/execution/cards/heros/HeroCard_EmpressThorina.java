@@ -1,5 +1,6 @@
 package execution.cards.heros;
 
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.minions.MinionCard;
 
@@ -15,7 +16,7 @@ public class HeroCard_EmpressThorina extends HeroCard {
     }
 
     @Override
-    protected String useAbility(Game game, int row) {
+    protected ErrorType useAbility(Game game, int row) {
         MinionCard[] cards = game.getBoardRow(row);
         MinionCard cardToChange = null;
         for (MinionCard card : cards) {
@@ -28,9 +29,9 @@ public class HeroCard_EmpressThorina extends HeroCard {
         }
         if (cardToChange == null) {
             // This should never be reached
-            return "CRITICAL: Empress Thorina has nothing to attack!";
+            return ErrorType.CRITICAL_EMPRESS_THORINA_ATTACKS_NULL;
         }
         cardToChange.destroy();
-        return null;
+        return ErrorType.NO_ERROR;
     }
 }

@@ -1,5 +1,6 @@
 package execution.cards.minions;
 
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
 
@@ -16,13 +17,13 @@ public class MinionCard_TheRipper extends MinionCard {
     }
 
     @Override
-    protected String useAbility(Game game, Card card) {
+    protected ErrorType useAbility(Game game, Card card) {
         if (card.getCardType() != 1) {
             // This should never be reached!
-            return "CRITICAL: Can only use ability on minion cards.";
+            return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ABILITY_MINIONS;
         }
         // Remove 2 AD from the card
         ((MinionCard)card).attackDamage = Math.max(((MinionCard)card).attackDamage - 2, 0);
-        return null;
+        return ErrorType.NO_ERROR;
     }
 }

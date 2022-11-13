@@ -1,5 +1,6 @@
 package execution.cards.heros;
 
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.minions.MinionCard;
 
@@ -15,13 +16,13 @@ public class HeroCard_GeneralKocioraw extends HeroCard {
     }
 
     @Override
-    protected String useAbility(Game game, int row) {
+    protected ErrorType useAbility(Game game, int row) {
         MinionCard[] cards = game.getBoardRow(row);
         for (MinionCard card : cards) {
             if (card != null) {
                 card.setAttackDamage(card.getAttackDamage() + 1);
             }
         }
-        return null;
+        return ErrorType.NO_ERROR;
     }
 }

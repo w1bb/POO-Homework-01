@@ -13,6 +13,7 @@ public class Game {
     private int currentPlayerTurn;
     private MinionCard[][] board;
     private int manaToAdd;
+    private boolean ended;
 
     public Game(Player[] players, int initialPlayer,
                 int playerOneDeckIdx, int playerTwoDeckIdx,
@@ -26,13 +27,15 @@ public class Game {
         this.currentPlayerTurn = initialPlayer;
         this.board = new MinionCard[4][5];
         this.manaToAdd = 1;
+        this.ended = false;
     }
 
     public void endTurn() {
         for (int row = 0; row < 3; ++row) {
             if (isPlayersRow(players[currentPlayerTurn], row)) {
                 for (MinionCard card : board[row]) {
-                    card.unfreeze();
+                    if (card != null)
+                        card.unfreeze();
                 }
             }
         }
@@ -121,11 +124,21 @@ public class Game {
             board[row][column] = null;
     }
 
+    public ErrorType pushOnBoardRow(MinionCard minionCard, int row) {
+        for (int i = 0; i < board[row].length; ++i) {
+            if (board[row][i] == null) {
+                board[row][i] = minionCard;
+                return ErrorType.NO_ERROR;
+            }
+        }
+        return ErrorType.ERROR_BOARD_ROW_FULL;
+    }
+
     public void redrawBoard() {
         for (int row = 0; row < 4; ++row) {
             int lastUnusedColumn = 0;
             for (int column = 0; column < 5; ++column) {
-                if (board[row][column].getHealth() == 0)
+                if (board[row][column] != null && board[row][column].getHealth() == 0)
                     board[row][column] = null;
                 if (board[row][column] != null) {
                     board[row][lastUnusedColumn] = board[row][column];
@@ -138,6 +151,10 @@ public class Game {
 
     public Player getCurrentPlayer() {
         return players[currentPlayerTurn];
+    }
+
+    public Player getNextPlayer() {
+        return players[1 - currentPlayerTurn];
     }
 
     public ArrayNode boardToArrayNode(ObjectMapper objectMapper) {
@@ -160,5 +177,20 @@ public class Game {
                     frozenCardsInside.add(card.toObjectNode(objectMapper));
             }
         return frozenCardsInside;
+    }
+
+    public boolean isOver() {
+        if (!ended) {
+            ended = (players[0].getHeroCard().getHealth() <= 0 ||
+                    players[1].getHeroCard().getHealth() <= 0);
+            if (ended) {
+                if (players[0].getHeroCard().getHealth() > 0)
+                    players[0].addVictory();
+                else
+                    players[1].addVictory();
+            }
+            return ended;
+        }
+        return true;
     }
 }

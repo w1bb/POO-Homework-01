@@ -1,5 +1,6 @@
 package execution.cards.minions;
 
+import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
 
@@ -16,8 +17,8 @@ public class MinionCard_Berserker extends MinionCard {
     }
 
     @Override
-    protected String useAbility(Game game, Card card) {
+    protected ErrorType useAbility(Game game, Card card) {
         // This should never be reached!
-        return "CRITICAL: Sentinel has NO ability implemented.";
+        return ErrorType.CRITICAL_BERSERKER_NO_ABILITY;
     }
 }
