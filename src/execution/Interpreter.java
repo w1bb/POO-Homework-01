@@ -58,9 +58,9 @@ public class Interpreter {
             case "getCardAtPosition":
                 objectNode.put("x", actionsInput.getX());
                 objectNode.put("y", actionsInput.getY());
-                MinionCard card = game.getCard(actionsInput.getY(), actionsInput.getX());
+                MinionCard card = game.getCard(actionsInput.getX(), actionsInput.getY());
                 if (card == null)
-                    objectNode.put("output", "No card at that position.");
+                    objectNode.put("output", "No card available at that position.");
                 else
                     objectNode.set("output", card.toObjectNode(objectMapper));
                 break;
@@ -114,12 +114,20 @@ public class Interpreter {
             case "cardUsesAttack" -> {
                 int attackerY = actionsInput.getCardAttacker().getY();
                 int attackerX = actionsInput.getCardAttacker().getX();
-                MinionCard attackerCard = game.getCard(attackerY, attackerX);
+                MinionCard attackerCard = game.getCard(attackerX, attackerY);
                 int attackedY = actionsInput.getCardAttacked().getY();
                 int attackedX = actionsInput.getCardAttacked().getX();
-                Card attackedCard = game.getCard(attackedY, attackedX);
+                Card attackedCard = game.getCard(attackedX, attackedY);
                 e = attackerCard.tryUseAttack(game, attackedCard);
                 if (e != ErrorType.NO_ERROR) {
+                    ObjectNode cardAttacker = objectMapper.createObjectNode();
+                    cardAttacker.put("x", attackerX);
+                    cardAttacker.put("y", attackerY);
+                    ObjectNode cardAttacked = objectMapper.createObjectNode();
+                    cardAttacked.put("x", attackedX);
+                    cardAttacked.put("y", attackedY);
+                    objectNode.set("cardAttacker", cardAttacker);
+                    objectNode.set("cardAttacked", cardAttacked);
                     objectNode.put("error", e.interpret());
                     output.add(objectNode);
                 }
@@ -129,10 +137,10 @@ public class Interpreter {
             case "cardUsesAbility" -> {
                 int attackerY = actionsInput.getCardAttacker().getY();
                 int attackerX = actionsInput.getCardAttacker().getX();
-                MinionCard attackerCard = game.getCard(attackerY, attackerX);
+                MinionCard attackerCard = game.getCard(attackerX, attackerY);
                 int attackedY = actionsInput.getCardAttacked().getY();
                 int attackedX = actionsInput.getCardAttacked().getX();
-                MinionCard attackedCard = game.getCard(attackedY, attackedX);
+                MinionCard attackedCard = game.getCard(attackedX, attackedY);
                 e = attackerCard.tryUseAbility(game, attackedCard);
                 if (e != ErrorType.NO_ERROR) {
                     objectNode.put("error", e.interpret());
@@ -177,6 +185,8 @@ public class Interpreter {
             }
             case "useEnvironmentCard" -> {
                 Card card = game.getCurrentPlayer().getCardFromHand(actionsInput.getHandIdx());
+                objectNode.put("affectedRow", actionsInput.getAffectedRow());
+                objectNode.put("handIdx", actionsInput.getHandIdx());
                 if (card.getCardType() != 2) {
                     objectNode.put("error", "Chosen card is not of type environment.");
                     output.add(objectNode);

@@ -24,12 +24,14 @@ public abstract class EnvironmentCard extends Card {
     public ErrorType tryUseAbility(Game game, int row) {
         Player player = game.getCurrentPlayer();
         if (player.getMana() < this.mana)
-            return ErrorType.ERROR_INSUFFICIENT_MANA_FOR_HERO;
+            return ErrorType.ERROR_INSUFFICIENT_MANA_FOR_ENVIRONMENT;
         if (game.isPlayersRow(player, row) && !this.allowAbilityOnSelf)
             return ErrorType.ERROR_NOT_ENEMY_ROW;
         ErrorType returnValue = useAbility(game, row);
-        if (returnValue == ErrorType.NO_ERROR)
+        if (returnValue == ErrorType.NO_ERROR) {
             player.setMana(player.getMana() - this.mana);
+            game.redrawBoard();
+        }
         return returnValue;
     }
 

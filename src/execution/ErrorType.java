@@ -19,6 +19,12 @@ public enum ErrorType {
             return "Not enough mana to use hero's ability.";
         }
     },
+    ERROR_INSUFFICIENT_MANA_FOR_ENVIRONMENT {
+        @Override
+        public String interpret() {
+            return "Not enough mana to use environment card.";
+        }
+    },
     ERROR_NOT_ENEMY_ROW {
         @Override
         public String interpret() {

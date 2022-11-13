@@ -33,7 +33,7 @@ public class Game {
     }
 
     public void endTurn() {
-        for (int row = 0; row < 3; ++row) {
+        for (int row = 0; row < board.length; ++row) {
             if (isPlayersRow(players[currentPlayerTurn], row)) {
                 for (MinionCard card : board[row]) {
                     if (card != null)
@@ -52,6 +52,18 @@ public class Game {
         manaToAdd = Math.min(manaToAdd + 1, 10);
         players[0].drawCard();
         players[1].drawCard();
+        for (Card[] cards : board) {
+            for (Card card : cards) {
+                if (card != null) {
+                    if (card.getCardType() == 0) {
+                        ((HeroCard) card).setAbilityCountOnRound(0);
+                    } else if (card.getCardType() == 1) {
+                        ((MinionCard) card).setAttackCountOnRound(0);
+                        ((MinionCard) card).setAbilityCountOnRound(0);
+                    }
+                }
+            }
+        }
         currentRound++;
     }
 
@@ -77,7 +89,7 @@ public class Game {
     }
 
     public Boolean checkRowValidity(int row) {
-        if (row < 0 || row > 3) {
+        if (row < 0 || row > board.length) {
             // This should never be reached!
             System.out.println("CRITICAL: checkRowValidity was called with wrong row (" + row + ")!");
             return false;
@@ -95,10 +107,10 @@ public class Game {
     }
 
     public Boolean isTankOnEnemyLane() {
-        for (int row = 0; row < 3; ++row) {
+        for (int row = 0; row < board.length; ++row) {
             if (!isPlayersRow(players[currentPlayerTurn], row)) {
                 for (MinionCard card : board[row]) {
-                    if (card.isTank())
+                    if (card != null && card.isTank())
                         return true;
                 }
             }
@@ -108,7 +120,7 @@ public class Game {
 
     public Boolean isPlayersRow(Player player, int row) {
         if (checkPlayerValidity(player) && checkRowValidity(row))
-            return (player == players[1]) ^ (initialPlayer == 1) ^ (row >= 2);
+            return ((player == players[1]) ^ (row >= 2));
         return null;
     }
 
@@ -137,17 +149,17 @@ public class Game {
     }
 
     public void redrawBoard() {
-        for (int row = 0; row < 4; ++row) {
+        for (int row = 0; row < board.length; ++row) {
             int lastUnusedColumn = 0;
             for (int column = 0; column < 5; ++column) {
-                if (board[row][column] != null && board[row][column].getHealth() == 0)
+                if (board[row][column] != null && board[row][column].getHealth() <= 0)
                     board[row][column] = null;
                 if (board[row][column] != null) {
                     board[row][lastUnusedColumn] = board[row][column];
                     lastUnusedColumn++;
                 }
             }
-            for (int column = lastUnusedColumn; column < 5; ++column)
+            for (int column = lastUnusedColumn; column < board[row].length; ++column)
                 board[row][column] = null;
         }
     }

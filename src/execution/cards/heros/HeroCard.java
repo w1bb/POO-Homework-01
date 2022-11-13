@@ -14,6 +14,7 @@ public abstract class HeroCard extends Card {
     protected int health;
     protected Boolean allowAbilityOnEnemy;
     protected Boolean allowAbilityOnSelf;
+
     protected int abilityCountOnRound;
 
     public HeroCard(String name, String description, ArrayList<String> colors,
@@ -69,4 +70,8 @@ public abstract class HeroCard extends Card {
     }
 
     public int getHealth() { return this.health; }
+
+    public void setAbilityCountOnRound(int abilityCountOnRound) {
+        this.abilityCountOnRound = abilityCountOnRound;
+    }
 }

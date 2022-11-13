@@ -99,8 +99,10 @@ public abstract class MinionCard extends Card {
             }
         }
         ErrorType returnValue = useAbility(game, card);
-        if (returnValue == ErrorType.NO_ERROR)
+        if (returnValue == ErrorType.NO_ERROR) {
             ++this.abilityCountOnRound;
+            game.redrawBoard();
+        }
         return returnValue;
     }
 
@@ -115,7 +117,7 @@ public abstract class MinionCard extends Card {
     }
 
     public ErrorType tryUseAttack(Game game, Card card) {
-        if (card.getCardType() != 0 || card.getCardType() != 1) {
+        if (card.getCardType() != 0 && card.getCardType() != 1) {
             // This should never be reached!
             return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS_HEROS;
         }
@@ -172,4 +174,12 @@ public abstract class MinionCard extends Card {
     public Boolean getAllowPlacementOnFrontRow() { return allowPlacementOnFrontRow; }
 
     public Boolean getAllowPlacementOnBackRow() { return allowPlacementOnBackRow; }
+
+    public void setAttackCountOnRound(int attackCountOnRound) {
+        this.attackCountOnRound = attackCountOnRound;
+    }
+
+    public void setAbilityCountOnRound(int abilityCountOnRound) {
+        this.abilityCountOnRound = abilityCountOnRound;
+    }
 }
