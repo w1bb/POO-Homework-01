@@ -31,10 +31,22 @@ public abstract class HeroCard extends Card {
         this.abilityCountOnRound = 0;
     }
 
+    /**
+     * This method damages the card, removing at most <code>damagePoints</code> HP.
+     *
+     * @param damagePoints the most points that should be subtracted from this card's health
+     */
     public final void damage(final int damagePoints) {
         this.health = Math.max(0, this.health - damagePoints);
     }
 
+    /**
+     * This method is a public wrapper for the protected <code>useAbility()</code> method that
+     * makes sure certain conditions are met before using a special ability.
+     * @param game the current game that is played
+     * @param row the row on which the attack is planned
+     * @return based on the success / failure of the attack, an ErrorType is issued
+     */
     public final ErrorType tryUseAbility(final Game game, final int row, final Player player) {
         if (player.getMana() < this.mana) {
             return ErrorType.ERROR_INSUFFICIENT_MANA_FOR_HERO;
@@ -56,6 +68,12 @@ public abstract class HeroCard extends Card {
         return returnValue;
     }
 
+    /**
+     * This method is custom-made for each environment card and represents its special ability.
+     * @param game the current game that is played
+     * @param row the row on which the attack is planned
+     * @return based on the success / failure of the attack, an ErrorType is issued
+     */
     protected abstract ErrorType useAbility(Game game, int row);
 
     @Override

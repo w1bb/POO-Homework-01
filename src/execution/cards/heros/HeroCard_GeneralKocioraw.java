@@ -26,6 +26,9 @@ public final class HeroCard_GeneralKocioraw extends HeroCard {
         return ErrorType.NO_ERROR;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Card copy() {
         return new HeroCard_GeneralKocioraw(this.description, this.colors,

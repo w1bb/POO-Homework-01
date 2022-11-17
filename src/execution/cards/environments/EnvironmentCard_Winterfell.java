@@ -15,6 +15,9 @@ public final class EnvironmentCard_Winterfell extends EnvironmentCard {
                 true, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);

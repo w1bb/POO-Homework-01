@@ -71,6 +71,12 @@ public final class CardInput {
         this.name = name;
     }
 
+    /**
+     * This method converts the given input format into a Card.
+     *
+     * @param ownerIdx each card's owner
+     * @return the converted value
+     */
     public Card toCard(final int ownerIdx) {
         switch (name) {
             case "Firestorm":
@@ -121,19 +127,19 @@ public final class CardInput {
     @Override
     public String toString() {
         return "CardInput{"
-                +  "mana="
+                + "mana="
                 + mana
-                +  ", attackDamage="
+                + ", attackDamage="
                 + attackDamage
                 + ", health="
                 + health
-                +  ", description='"
+                + ", description='"
                 + description
                 + '\''
                 + ", colors="
                 + colors
                 + ", name='"
-                +  ""
+                + ""
                 + name
                 + '\''
                 + '}';

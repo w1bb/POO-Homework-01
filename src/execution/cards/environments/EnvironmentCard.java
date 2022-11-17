@@ -23,6 +23,13 @@ public abstract class EnvironmentCard extends Card {
         this.allowAbilityOnSelf = allowAbilityOnSelf;
     }
 
+    /**
+     * This method is a public wrapper for the protected <code>useAbility()</code> method that
+     * makes sure certain conditions are met before using a special ability.
+     * @param game the current game that is played
+     * @param row the row on which the attack is planned
+     * @return based on the success / failure of the attack, an ErrorType is issued
+     */
     public final ErrorType tryUseAbility(final Game game, final int row) {
         Player player = game.getCurrentPlayer();
         if (player.getMana() < this.mana) {
@@ -39,6 +46,12 @@ public abstract class EnvironmentCard extends Card {
         return returnValue;
     }
 
+    /**
+     * This method is custom-made for each environment card and represents its special ability.
+     * @param game the current game that is played
+     * @param row the row on which the attack is planned
+     * @return based on the success / failure of the attack, an ErrorType is issued
+     */
     protected abstract ErrorType useAbility(Game game, int row);
 
     @Override
@@ -58,5 +71,8 @@ public abstract class EnvironmentCard extends Card {
         return objectNode;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public abstract Card copy();
 }

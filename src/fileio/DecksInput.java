@@ -37,6 +37,12 @@ public final class DecksInput {
         this.decks = decks;
     }
 
+    /**
+     * This method converts the given input format into an ArrayList of type Deck.
+     *
+     * @param ownerIdx each card's owner
+     * @return the converted value
+     */
     public ArrayList<Deck> toArrayOfDeck(final int ownerIdx) {
         ArrayList<Deck> decksReturn = new ArrayList<>();
         for (int deckIdx = 0; deckIdx < decks.size(); ++deckIdx) {
@@ -54,7 +60,7 @@ public final class DecksInput {
         return "InfoInput{"
                 + "nr_cards_in_deck="
                 + nrCardsInDeck
-                +  ", nr_decks="
+                + ", nr_decks="
                 + nrDecks
                 + ", decks="
                 + decks

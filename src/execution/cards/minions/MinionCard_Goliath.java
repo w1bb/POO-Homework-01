@@ -17,12 +17,18 @@ public final class MinionCard_Goliath extends MinionCard {
                 true, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
         // This should never be reached!
         return ErrorType.CRITICAL_GOLIATH_NO_ABILITY;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Card copy() {
         return new MinionCard_Goliath(this.description, this.colors, this.mana,

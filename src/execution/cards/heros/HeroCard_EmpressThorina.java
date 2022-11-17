@@ -36,6 +36,9 @@ public final class HeroCard_EmpressThorina extends HeroCard {
         return ErrorType.NO_ERROR;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Card copy() {
         return new HeroCard_EmpressThorina(this.description, this.colors,

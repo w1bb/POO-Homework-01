@@ -18,6 +18,9 @@ public final class MinionCard_TheRipper extends MinionCard {
                 true, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
         if (attackedCard.getCardType() != CardType.MINION) {
@@ -30,6 +33,9 @@ public final class MinionCard_TheRipper extends MinionCard {
         return ErrorType.NO_ERROR;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Card copy() {
         return new MinionCard_TheRipper(this.description, this.colors, this.mana,

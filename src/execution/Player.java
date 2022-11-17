@@ -24,6 +24,12 @@ public final class Player {
         this.wins = 0;
     }
 
+    /**
+     * This method resets all player's properties to default / given values.
+     * @param playerDeckId the new deck id
+     * @param shuffleSeed the new shuffle seed
+     * @param heroCard the newly chosen hero card
+     */
     public void reset(final int playerDeckId, final int shuffleSeed, final HeroCard heroCard) {
         this.currentDeck = decks.get(playerDeckId);
         this.currentDeck.shuffle(shuffleSeed);
@@ -32,6 +38,9 @@ public final class Player {
         this.currentMana = 0;
     }
 
+    /**
+     * Draw a card from the current, shuffled deck and place it into the player's hand.
+     */
     public void drawCard() {
         Card drawnCard = currentDeck.drawCard();
         if (drawnCard != null) {
@@ -40,14 +49,29 @@ public final class Player {
         }
     }
 
+    /**
+     * Remove a given card from the hand.
+     * @param handIdx the index of the card to be dropped
+     */
     public void dropCardFromHand(final int handIdx) {
-        currentHand.remove(handIdx); // ?
+        currentHand.remove(handIdx);
     }
 
+    /**
+     * Getter for any card in the current hand
+     * @param handIdx the index of the card to be removed
+     * @return the selected card
+     */
     public Card getCardFromHand(final int handIdx) {
         return currentHand.get(handIdx);
     }
 
+    /**
+     * This method places a card on the board.
+     * @param handIdx the index of the card to be placed
+     * @param game the current game
+     * @return based on the success / failure of the action, return an instance of ErrorType
+     */
     public ErrorType placeCardOnBoard(final int handIdx, final Game game) {
         Card card = getCardFromHand(handIdx);
         if (card.getCardType() == CardType.ENVIRONMENT) {
@@ -60,18 +84,18 @@ public final class Player {
         ErrorType e = ErrorType.NO_ERROR;
         if (minionCard.getAllowPlacementOnFrontRow()) {
             if (game.isPlayersRow(this.playerIdx, 1)) {
-                e = game.pushOnBoardRow(minionCard, 1);
+                e = game.pushOnBoardRow(minionCard, Game.BOARD_ROWS / 2 - 1);
             } else {
-                e = game.pushOnBoardRow(minionCard, 2);
+                e = game.pushOnBoardRow(minionCard, Game.BOARD_ROWS / 2);
             }
         } else if (minionCard.getAllowPlacementOnBackRow()) {
             if (game.isPlayersRow(this.playerIdx, 0)) {
                 e = game.pushOnBoardRow(minionCard, 0);
             } else {
-                e = game.pushOnBoardRow(minionCard, 3);
+                e = game.pushOnBoardRow(minionCard, Game.BOARD_ROWS - 1);
             }
         }
-        // ? Is this so?
+        // If the card has been placed, drop it from the hand and decrease mana left
         if (e == ErrorType.NO_ERROR) {
             this.currentMana -= card.getMana();
             dropCardFromHand(handIdx);
@@ -91,7 +115,13 @@ public final class Player {
         return this.currentHeroCard;
     }
 
-    public ArrayNode currentHandToArrayNode(final ObjectMapper objectMapper) {
+    /**
+     * This method converts the current hand into a printable ObjectNode format.
+     *
+     * @return the converted value
+     */
+    public ArrayNode currentHandToArrayNode() {
+        ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode cardsInside = objectMapper.createArrayNode();
         for (Card card : currentHand) {
             cardsInside.add(card.toObjectNode());
@@ -99,7 +129,14 @@ public final class Player {
         return cardsInside;
     }
 
-    public ArrayNode currentHandEnvironmentToArrayNode(final ObjectMapper objectMapper) {
+    /**
+     * This method converts the current hand's environment cards into a printable
+     * ObjectNode format.
+     *
+     * @return the converted value
+     */
+    public ArrayNode currentHandEnvironmentToArrayNode() {
+        ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode cardsInside = objectMapper.createArrayNode();
         for (Card card : currentHand) {
             if (card.getCardType() == CardType.ENVIRONMENT) {
@@ -117,6 +154,9 @@ public final class Player {
         return this.wins;
     }
 
+    /**
+     * Increases the amount of wins of the current player.
+     */
     public void addVictory() {
         this.wins++;
     }

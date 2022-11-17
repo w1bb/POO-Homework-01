@@ -48,10 +48,16 @@ public abstract class MinionCard extends Card {
         this.abilityCountOnRound = 0;
     }
 
+    /**
+     * This method unfreezes this card (<code>this.frozenStatus = false;</code>).
+     */
     public final void unfreeze() {
         this.frozenStatus = false;
     }
 
+    /**
+     * This method freezes this card (<code>this.frozenStatus = true;</code>).
+     */
     public final void freeze() {
         this.frozenStatus = true;
     }
@@ -80,28 +86,42 @@ public abstract class MinionCard extends Card {
         this.attackDamage = attackDamage;
     }
 
+    /**
+     * This method is a public wrapper for the protected <code>useAbility()</code> method that
+     * makes sure certain conditions are met before using a special ability.
+     * @param game the current game that is played
+     * @param card the card on which the attack is planned
+     * @return based on the success / failure of the attack, an ErrorType is issued
+     */
     public final ErrorType tryUseAbility(final Game game, final Card card) {
+        // An ability can only be used on a minion
         if (card.getCardType() != CardType.MINION) {
             // This should never be reached!
             return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS;
         }
+        // An ability can only be used if the attacker is not frozen
         if (this.frozenStatus) {
             return ErrorType.ERROR_ATTACKER_FROZEN;
         }
+        // Only allow an attack or ability per round
         if (this.attackCountOnRound > 0 || this.abilityCountOnRound > 0) {
             return ErrorType.ERROR_ATTACKER_ALREADY_ATTACKED;
         }
+        // A card that can only attack another aly card should only attack an aly card
         if ((this.ownerIdx != card.getOwnerIdx()) && !this.allowAbilityOnEnemy) {
             return ErrorType.ERROR_ATTACKER_NOT_ALLY;
         }
         if (this.allowAbilityOnEnemy && !this.allowAttackOnSelf) {
+            // A card that can only attack another enemy card should only attack an enemy card
             if (this.ownerIdx == card.getOwnerIdx()) {
                 return ErrorType.ERROR_ATTACKED_CARD_NOT_ENEMY;
             }
-            if (game.isTankOnEnemyLane() && !((MinionCard) card).tankStatus) {
+            // Make sure there are no tanks on the board
+            if (game.isTankOnEnemyLanes() && !((MinionCard) card).tankStatus) {
                 return ErrorType.ERROR_ATTACKED_CARD_NOT_TANK;
             }
         }
+        // Let the useAbility() method take our place
         ErrorType returnValue = useAbility(game, card);
         if (returnValue == ErrorType.NO_ERROR) {
             ++this.abilityCountOnRound;
@@ -110,16 +130,37 @@ public abstract class MinionCard extends Card {
         return returnValue;
     }
 
+    /**
+     * This method implements a custom-made ability for this minion card.
+     * @param game the current game that is played
+     * @param attackedCard the card on which the attack is planned
+     * @return based on the success / failure of the attack, an ErrorType is issued
+     */
     protected abstract ErrorType useAbility(Game game, Card attackedCard);
 
+    /**
+     * This method damages the card, removing at most <code>damagePoints</code> HP.
+     *
+     * @param damagePoints the most points that should be subtracted from this card's health
+     */
     public final void damage(final int damagePoints) {
         this.health = Math.max(0, this.health - damagePoints);
     }
 
+    /**
+     * This method destroys a given card by changing its health to 0.
+     */
     public final void destroy() {
         this.health = 0;
     }
 
+    /**
+     * This method is a public wrapper for the protected <code>useAttack()</code> method that
+     * makes sure certain conditions are met before using an attack.
+     * @param game the current game that is played
+     * @param card the card on which the attack is planned
+     * @return based on the success / failure of the attack, an ErrorType is issued
+     */
     public final ErrorType tryUseAttack(final Game game, final Card card) {
         if (card.getCardType() != CardType.HERO && card.getCardType() != CardType.MINION) {
             // This should never be reached!
@@ -135,10 +176,8 @@ public abstract class MinionCard extends Card {
             return ErrorType.ERROR_ATTACKED_CARD_NOT_ENEMY;
         }
         if ((this.ownerIdx != card.getOwnerIdx()) && this.allowAttackOnEnemy
-                && game.isTankOnEnemyLane()) {
-            if (card.getCardType() != CardType.MINION
-                    || (card.getCardType() == CardType.MINION
-                        && !((MinionCard) card).tankStatus)) {
+                && game.isTankOnEnemyLanes()) {
+            if (card.getCardType() != CardType.MINION || !((MinionCard) card).tankStatus) {
                 return ErrorType.ERROR_ATTACKED_CARD_NOT_TANK;
             }
         }
@@ -150,6 +189,12 @@ public abstract class MinionCard extends Card {
         return returnValue;
     }
 
+    /**
+     * This method implements a general attack strategy on another card. This may later be
+     * overwritten to add complexity in the game.
+     * @param card the card on which the attack is planned
+     * @return based on the success / failure of the attack, an ErrorType is issued
+     */
     protected final ErrorType useAttack(final Card card) {
         if (card.getCardType() == CardType.HERO) {
             ((HeroCard) card).damage(this.attackDamage);
@@ -198,5 +243,8 @@ public abstract class MinionCard extends Card {
         this.abilityCountOnRound = abilityCountOnRound;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public abstract Card copy();
 }

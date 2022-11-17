@@ -63,6 +63,12 @@ public final class StartGameInput {
         this.startingPlayer = startingPlayer;
     }
 
+    /**
+     * This method converts the given input format into a Game.
+     *
+     * @param players an array of two players that will participate in the games
+     * @return the converted value
+     */
     public Game toGame(final Player[] players) {
         HeroCard playerOneHeroCard = (HeroCard) playerOneHero.toCard(0);
         HeroCard playerTwoHeroCard = (HeroCard) playerTwoHero.toCard(1);
@@ -79,7 +85,7 @@ public final class StartGameInput {
                 + playerTwoDeckIdx
                 + ", shuffleSeed="
                 + shuffleSeed
-                +  ", playerOneHero="
+                + ", playerOneHero="
                 + playerOneHero
                 + ", playerTwoHero="
                 + playerTwoHero

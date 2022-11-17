@@ -17,12 +17,18 @@ public final class MinionCard_Sentinel extends MinionCard {
                 false, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
         // This should never be reached!
         return ErrorType.CRITICAL_SENTINEL_NO_ABILITY;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Card copy() {
         return new MinionCard_Sentinel(this.description, this.colors, this.mana,

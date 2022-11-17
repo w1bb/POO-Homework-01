@@ -26,6 +26,9 @@ public final class EnvironmentCard_Firestorm extends EnvironmentCard {
         return ErrorType.NO_ERROR;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Card copy() {
         return new EnvironmentCard_Firestorm(this.description, this.colors,

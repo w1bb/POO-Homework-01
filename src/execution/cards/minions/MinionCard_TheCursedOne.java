@@ -17,6 +17,9 @@ public final class MinionCard_TheCursedOne extends MinionCard {
                 false, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
         if (attackedCard.getCardType() != CardType.MINION) {
@@ -30,6 +33,9 @@ public final class MinionCard_TheCursedOne extends MinionCard {
         return ErrorType.NO_ERROR;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Card copy() {
         return new MinionCard_TheCursedOne(this.description, this.colors, this.mana,

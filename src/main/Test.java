@@ -1,6 +1,5 @@
 package main;
 
-import checker.Checker;
 import checker.CheckerConstants;
 
 import java.io.File;
@@ -29,8 +28,8 @@ public final class Test {
         if (inputDir != null) {
             Arrays.sort(inputDir);
 
-//            Scanner scanner = new Scanner(System.in);
-            String fileName = "test15_use_hero_ability_2_invalid.json";
+            Scanner scanner = new Scanner(System.in);
+            String fileName = scanner.next();
             for (File file : inputDir) {
                 if (file.getName().equalsIgnoreCase(fileName)) {
                     Main.action(file.getName(), CheckerConstants.OUT_FILE);

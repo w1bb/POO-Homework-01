@@ -1,18 +1,25 @@
 package execution;
 
 public enum ErrorType {
+    // No error at all
     NO_ERROR {
         @Override
         public String interpret() {
             return "No error";
         }
     },
+    // Tested errors
     ERROR_BOARD_ROW_FULL {
+        /**
+         * {@inheritDoc}
+         * An alternative interpretation could be: "Cannot steal enemy card since the player's row
+         * is full".
+         */
         @Override
         public String interpret() {
             return "Cannot place card on table since row is full.";
         }
-    }, // ? Ambiguous meaning - Cannot steal enemy card since the player's row is full.
+    },
     ERROR_INSUFFICIENT_MANA_FOR_HERO {
         @Override
         public String interpret() {
@@ -91,10 +98,11 @@ public enum ErrorType {
             return "Not enough mana to place card on table.";
         }
     },
+    // Custom made errors
     CRITICAL_HEART_HOUND_ABILITY_NO_CARD_TO_MOVE {
         @Override
         public String interpret() {
-            return "??"; // TODO
+            return "CRITICAL: Heart Hound has no card to move!";
         }
     },
     CRITICAL_EMPRESS_THORINA_ATTACKS_NULL {
@@ -112,46 +120,50 @@ public enum ErrorType {
     CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS {
         @Override
         public String interpret() {
-            return "CRITICAL: Can only use attack on minion cards.";
+            return "CRITICAL: Can only use attack on minion cards!";
         }
     },
     CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS_HEROS {
         @Override
         public String interpret() {
-            return "CRITICAL: Can only use attack on minion/hero cards.";
+            return "CRITICAL: Can only use attack on minion/hero cards!";
         }
     },
     CRITICAL_MINIONCARD_CAN_ONLY_ABILITY_MINIONS {
         @Override
         public String interpret() {
-            return "CRITICAL: Can only use ability on minion cards.";
+            return "CRITICAL: Can only use ability on minion cards!";
         }
     },
     CRITICAL_BERSERKER_NO_ABILITY {
         @Override
         public String interpret() {
-            return "CRITICAL: Berserker has NO ability implemented.";
+            return "CRITICAL: Berserker has NO ability implemented!";
         }
     },
     CRITICAL_GOLIATH_NO_ABILITY {
         @Override
         public String interpret() {
-            return "CRITICAL: Goliath has NO ability implemented.";
+            return "CRITICAL: Goliath has NO ability implemented!";
         }
     },
     CRITICAL_SENTINEL_NO_ABILITY {
         @Override
         public String interpret() {
-            return "CRITICAL: Sentinel has NO ability implemented.";
+            return "CRITICAL: Sentinel has NO ability implemented!";
         }
     },
     CRITICAL_WARDEN_NO_ABILITY {
         @Override
         public String interpret() {
-            return "CRITICAL: Warden has NO ability implemented.";
+            return "CRITICAL: Warden has NO ability implemented!";
         }
     };
 
+    /**
+     * This method converts a given error name into a detailed explanation.
+     * @return the detailed explanation
+     */
     public String interpret() {
         return "Undefined interpretation";
     }

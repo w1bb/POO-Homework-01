@@ -15,6 +15,9 @@ public final class HeroCard_LordRoyce extends HeroCard {
                 true, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);

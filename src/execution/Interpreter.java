@@ -35,7 +35,7 @@ public final class Interpreter {
                                          final ObjectNode objectNode) {
         objectNode.put("playerIdx", actionsInput.getPlayerIdx());
         objectNode.set("output",
-                players[actionsInput.getPlayerIdx() - 1].currentHandToArrayNode(objectMapper));
+                players[actionsInput.getPlayerIdx() - 1].currentHandToArrayNode());
     }
 
     private void interpretGetPlayerDeck(final ActionsInput actionsInput,
@@ -47,7 +47,7 @@ public final class Interpreter {
 
     private void interpretGetCardsOnTable(final Game game,
                                           final ObjectNode objectNode) {
-        objectNode.set("output", game.boardToArrayNode(objectMapper));
+        objectNode.set("output", game.boardToArrayNode());
     }
 
     private void interpretGetPlayerTurn(final Game game,
@@ -86,13 +86,12 @@ public final class Interpreter {
                                                     final ObjectNode objectNode) {
         objectNode.put("playerIdx", actionsInput.getPlayerIdx());
         objectNode.set("output",
-                players[actionsInput.getPlayerIdx() - 1]
-                        .currentHandEnvironmentToArrayNode(objectMapper));
+                players[actionsInput.getPlayerIdx() - 1].currentHandEnvironmentToArrayNode());
     }
 
     private void interpretGetFrozenCardsOnTable(final Game game,
                                                 final ObjectNode objectNode) {
-        objectNode.set("output", game.boardFrozenToArrayNode(objectMapper));
+        objectNode.set("output", game.boardFrozenToArrayNode());
     }
 
     private void interpretGetTotalGamesPlayed(final ObjectNode objectNode) {

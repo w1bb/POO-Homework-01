@@ -38,7 +38,18 @@ public abstract class Card {
     public final void setOwnerIdx(final int ownerIdx) {
         this.ownerIdx = ownerIdx;
     }
+
+    /**
+     * This method converts the given format into a printable ObjectNode format.
+     *
+     * @return the converted value
+     */
     public abstract ObjectNode toObjectNode();
 
+    /**
+     * This method is custom-made for each card and represents a way to create a deep-copy of a
+     * given card
+     * @return a deep-copy of the current card
+     */
     public abstract Card copy();
 }

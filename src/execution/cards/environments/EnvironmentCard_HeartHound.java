@@ -32,10 +32,13 @@ public final class EnvironmentCard_HeartHound extends EnvironmentCard {
             // This should never be reached!
             return ErrorType.CRITICAL_HEART_HOUND_ABILITY_NO_CARD_TO_MOVE;
         }
-        cardToMove.setOwnerIdx(game.getRowLength() - cardToMove.getOwnerIdx() - 1);
-        return game.pushOnBoardRow(cardToMove, game.getRowLength() - row - 1);
+        cardToMove.setOwnerIdx(Game.BOARD_COLUMNS - cardToMove.getOwnerIdx() - 1);
+        return game.pushOnBoardRow(cardToMove, Game.BOARD_COLUMNS - row - 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Card copy() {
         return new EnvironmentCard_HeartHound(this.description, this.colors,

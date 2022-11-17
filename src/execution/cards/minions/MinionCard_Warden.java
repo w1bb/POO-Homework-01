@@ -17,12 +17,18 @@ public final class MinionCard_Warden extends MinionCard {
                 true, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
         // This should never be reached!
         return ErrorType.CRITICAL_WARDEN_NO_ABILITY;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Card copy() {
         return new MinionCard_Warden(this.description, this.colors, this.mana,
