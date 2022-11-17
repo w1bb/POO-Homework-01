@@ -31,6 +31,9 @@ public final class Interpreter {
         this.output = this.objectMapper.createArrayNode();
     }
 
+    /**
+     * This method interprets the "getCardsInHand" command.
+     */
     private void interpretGetCardsInHand(final ActionsInput actionsInput,
                                          final ObjectNode objectNode) {
         objectNode.put("playerIdx", actionsInput.getPlayerIdx());
@@ -38,6 +41,9 @@ public final class Interpreter {
                 players[actionsInput.getPlayerIdx() - 1].currentHandToArrayNode());
     }
 
+    /**
+     * This method interprets the "getPlayerDeck" command.
+     */
     private void interpretGetPlayerDeck(final ActionsInput actionsInput,
                                         final ObjectNode objectNode) {
         objectNode.put("playerIdx", actionsInput.getPlayerIdx());
@@ -45,17 +51,26 @@ public final class Interpreter {
                 players[actionsInput.getPlayerIdx() - 1].getCurrentDeck().toArrayNode());
     }
 
+    /**
+     * This method interprets the "getCardsOnTable" command.
+     */
     private void interpretGetCardsOnTable(final Game game,
                                           final ObjectNode objectNode) {
         objectNode.set("output", game.boardToArrayNode());
     }
 
+    /**
+     * This method interprets the "getPlayerTurn" command.
+     */
     private void interpretGetPlayerTurn(final Game game,
                                         final ObjectNode objectNode) {
         objectNode.put("output",
                 (game.getCurrentPlayer() == players[0]) ? 1 : 2);
     }
 
+    /**
+     * This method interprets the "getPlayerHero" command.
+     */
     private void interpretGetPlayerHero(final ActionsInput actionsInput,
                                         final ObjectNode objectNode) {
         objectNode.put("playerIdx", actionsInput.getPlayerIdx());
@@ -63,6 +78,9 @@ public final class Interpreter {
                 players[actionsInput.getPlayerIdx() - 1].getHeroCard().toObjectNode());
     }
 
+    /**
+     * This method interprets the "getCardAtPosition" command.
+     */
     private void interpretGetCardAtPosition(final ActionsInput actionsInput,
                                             final Game game,
                                             final ObjectNode objectNode) {
@@ -76,12 +94,18 @@ public final class Interpreter {
         }
     }
 
+    /**
+     * This method interprets the "getPlayerMana" command.
+     */
     private void interpretGetPlayerMana(final ActionsInput actionsInput,
                                         final ObjectNode objectNode) {
         objectNode.put("playerIdx", actionsInput.getPlayerIdx());
         objectNode.put("output", players[actionsInput.getPlayerIdx() - 1].getMana());
     }
 
+    /**
+     * This method interprets the "getEnvironmentCardsInHand" command.
+     */
     private void interpretGetEnvironmentCardsInHand(final ActionsInput actionsInput,
                                                     final ObjectNode objectNode) {
         objectNode.put("playerIdx", actionsInput.getPlayerIdx());
@@ -89,23 +113,41 @@ public final class Interpreter {
                 players[actionsInput.getPlayerIdx() - 1].currentHandEnvironmentToArrayNode());
     }
 
+    /**
+     * This method interprets the "getFrozenCardsOnTable" command.
+     */
     private void interpretGetFrozenCardsOnTable(final Game game,
                                                 final ObjectNode objectNode) {
         objectNode.set("output", game.boardFrozenToArrayNode());
     }
 
+    /**
+     * This method interprets the "getTotalGamesPlayed" command.
+     */
     private void interpretGetTotalGamesPlayed(final ObjectNode objectNode) {
         objectNode.put("output", this.currentGame + 1);
     }
 
+    /**
+     * This method interprets the "getPlayerOneWins" command.
+     */
     private void interpretGetPlayerOneWins(final ObjectNode objectNode) {
         objectNode.put("output", players[0].getWins());
     }
 
+    /**
+     * This method interprets the "getPlayerTwoWins" command.
+     */
     private void interpretGetPlayerTwoWins(final ObjectNode objectNode) {
         objectNode.put("output", players[1].getWins());
     }
 
+    /**
+     * This method interprets the debug commands.
+     * @param actionsInput the given input to be parsed
+     * @param game the current game
+     * @return <code>true</code> if and only if the command was a debug command
+     */
     private boolean interpretDebugAction(final ActionsInput actionsInput,
                                          final Game game) {
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -156,10 +198,16 @@ public final class Interpreter {
         return true;
     }
 
+    /**
+     * This method interprets the "endPlayerTurn" command.
+     */
     private void interpretEndPlayerTurn(final Game game) {
         game.endTurn();
     }
 
+    /**
+     * This method interprets the "placeCard" command.
+     */
     private void interpretPlaceCard(final ActionsInput actionsInput,
                                     final Game game,
                                     final ObjectNode objectNode) {
@@ -171,6 +219,9 @@ public final class Interpreter {
         }
     }
 
+    /**
+     * This method interprets the "cardUsesAttack" command.
+     */
     private void interpretCardUsesAttack(final ActionsInput actionsInput,
                                          final Game game,
                                          final ObjectNode objectNode) {
@@ -196,6 +247,9 @@ public final class Interpreter {
         game.redrawBoard();
     }
 
+    /**
+     * This method interprets the "cardUsesAbility" command.
+     */
     private void interpretCardUsesAbility(final ActionsInput actionsInput,
                                           final Game game,
                                           final ObjectNode objectNode) {
@@ -221,6 +275,9 @@ public final class Interpreter {
         game.redrawBoard();
     }
 
+    /**
+     * This method interprets the "useAttackHero" command.
+     */
     private void interpretUseAttackHero(final ActionsInput actionsInput,
                                         final Game game,
                                         final ObjectNode objectNode) {
@@ -249,6 +306,9 @@ public final class Interpreter {
         game.redrawBoard();
     }
 
+    /**
+     * This method interprets the "useHeroAbility" command.
+     */
     private void interpretUseHeroAbility(final ActionsInput actionsInput,
                                          final Game game,
                                          final ObjectNode objectNode) {
@@ -263,6 +323,9 @@ public final class Interpreter {
         game.redrawBoard();
     }
 
+    /**
+     * This method interprets the "useEnvironmentCard" command.
+     */
     private void interpretUseEnvironmentCard(final ActionsInput actionsInput,
                                              final Game game,
                                              final ObjectNode objectNode) {
@@ -289,6 +352,12 @@ public final class Interpreter {
         game.redrawBoard();
     }
 
+    /**
+     * This method interprets the game commands.
+     * @param actionsInput the given input to be parsed
+     * @param game the current game
+     * @return <code>true</code> if and only if the command was a game command
+     */
     private boolean interpretGameAction(final ActionsInput actionsInput,
                                         final Game game) {
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -323,6 +392,10 @@ public final class Interpreter {
         return true;
     }
 
+    /**
+     * This method runs a single game instance and stores the output.
+     * @param gameInput the given input to be parsed
+     */
     private void runGame(final GameInput gameInput) {
         Game game = gameInput.getStartGame().toGame(players);
         for (ActionsInput actionsInput : gameInput.getActions()) {
@@ -333,6 +406,9 @@ public final class Interpreter {
         }
     }
 
+    /**
+     * This method runs all the given game instances and stores the output.
+     */
     public void runGames() {
         for (GameInput gameInput : gameInputs) {
             this.runGame(gameInput);

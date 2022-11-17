@@ -16,6 +16,5 @@ Starting audit...
 [ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/execution/cards/heros/HeroCard.java:105:5: Missing a Javadoc comment. [MissingJavadocMethod]
 [ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/execution/cards/heros/HeroCard_GeneralKocioraw.java:10:20: Name 'HeroCard_GeneralKocioraw' must match pattern '^[A-Z][a-zA-Z0-9]*$'. [TypeName]
 [ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/execution/cards/heros/HeroCard_EmpressThorina.java:10:20: Name 'HeroCard_EmpressThorina' must match pattern '^[A-Z][a-zA-Z0-9]*$'. [TypeName]
-[ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/execution/Interpreter.java:336:5: Missing a Javadoc comment. [MissingJavadocMethod]
 Audit done.
-Checkstyle ends with 18 errors.
+Checkstyle ends with 17 errors.
