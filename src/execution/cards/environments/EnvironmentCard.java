@@ -73,6 +73,7 @@ public abstract class EnvironmentCard extends Card {
 
     /**
      * {@inheritDoc}
+     * In this context, an EnvironmentCard copy will be made.
      */
     public abstract Card copy();
 }

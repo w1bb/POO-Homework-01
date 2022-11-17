@@ -245,6 +245,7 @@ public abstract class MinionCard extends Card {
 
     /**
      * {@inheritDoc}
+     * In this context, a MinionCard copy will be made.
      */
     public abstract Card copy();
 }

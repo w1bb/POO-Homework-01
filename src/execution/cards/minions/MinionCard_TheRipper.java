@@ -19,22 +19,25 @@ public final class MinionCard_TheRipper extends MinionCard {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} For MinionCard_TheRipper, the Weak Knees ability is used.
      */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
+        final int abilityADExtract = 2;
+        // Check if the card is a minion
         if (attackedCard.getCardType() != CardType.MINION) {
             // This should never be reached!
             return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ABILITY_MINIONS;
         }
-        // Remove 2 AD from the card
+        // Remove ABILITY_AD_EXTRACT AD from the card
         ((MinionCard) attackedCard).attackDamage =
-                Math.max(((MinionCard) attackedCard).attackDamage - 2, 0);
+                Math.max(((MinionCard) attackedCard).attackDamage - abilityADExtract, 0);
         return ErrorType.NO_ERROR;
     }
 
     /**
      * {@inheritDoc}
+     * More specifically, an MinionCard_TheRipper copy will be created.
      */
     @Override
     public Card copy() {

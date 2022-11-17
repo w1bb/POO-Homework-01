@@ -16,7 +16,7 @@ public final class HeroCard_LordRoyce extends HeroCard {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} For HeroCard_LordRoyce, the Sub-Zero ability is used.
      */
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
@@ -39,6 +39,10 @@ public final class HeroCard_LordRoyce extends HeroCard {
         return ErrorType.NO_ERROR;
     }
 
+    /**
+     * {@inheritDoc}
+     * More specifically, an HeroCard_LordRoyce copy will be created.
+     */
     @Override
     public Card copy() {
         return new HeroCard_LordRoyce(this.description, this.colors, this.mana, this.ownerIdx);

@@ -18,7 +18,7 @@ public final class MinionCard_Warden extends MinionCard {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} For MinionCard_Warden, there is NO special ability.
      */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
@@ -28,6 +28,7 @@ public final class MinionCard_Warden extends MinionCard {
 
     /**
      * {@inheritDoc}
+     * More specifically, an MinionCard_Warden copy will be created.
      */
     @Override
     public Card copy() {

@@ -21,6 +21,11 @@ public final class Interpreter {
 
     private int currentGame;
 
+    /**
+     * Creates a new Interpreter instance based on a given Input object. Two players will also be
+     * created, along with an output structure.
+     * @param inputData the given Input object
+     */
     public Interpreter(final Input inputData) {
         this.players = new Player[2];
         this.players[0] = new Player(0, inputData.getPlayerOneDecks().toArrayOfDeck(0));
@@ -84,11 +89,13 @@ public final class Interpreter {
     private void interpretGetCardAtPosition(final ActionsInput actionsInput,
                                             final Game game,
                                             final ObjectNode objectNode) {
+        // Get the card
         objectNode.put("x", actionsInput.getX());
         objectNode.put("y", actionsInput.getY());
         MinionCard card = game.getCard(actionsInput.getX(), actionsInput.getY());
+        // Check if the card exists and then output it
         if (card == null) {
-            objectNode.put("output", "No card available at that position.");
+            objectNode.put("output", ErrorType.ERROR_MISSING_CARD.interpret());
         } else {
             objectNode.set("output", card.toObjectNode());
         }
@@ -99,8 +106,11 @@ public final class Interpreter {
      */
     private void interpretGetPlayerMana(final ActionsInput actionsInput,
                                         final ObjectNode objectNode) {
-        objectNode.put("playerIdx", actionsInput.getPlayerIdx());
-        objectNode.put("output", players[actionsInput.getPlayerIdx() - 1].getMana());
+        // Get the player index
+        int playerIdx = actionsInput.getPlayerIdx();
+        // Output the player's mana
+        objectNode.put("playerIdx", playerIdx);
+        objectNode.put("output", players[playerIdx - 1].getMana());
     }
 
     /**
@@ -152,7 +162,7 @@ public final class Interpreter {
                                          final Game game) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", actionsInput.getCommand());
-
+        // Choose a command from the list bellow:
         switch (actionsInput.getCommand()) {
             case "getCardsInHand":
                 interpretGetCardsInHand(actionsInput, objectNode);
@@ -362,7 +372,7 @@ public final class Interpreter {
                                         final Game game) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", actionsInput.getCommand());
-
+        // Choose a command from the list bellow:
         switch (actionsInput.getCommand()) {
             case "endPlayerTurn":
                 interpretEndPlayerTurn(game);

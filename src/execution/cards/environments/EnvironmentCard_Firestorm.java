@@ -15,6 +15,9 @@ public final class EnvironmentCard_Firestorm extends EnvironmentCard {
                 true, false);
     }
 
+    /**
+     * {@inheritDoc} For EnvironmentCard_Firestorm, the Firestorm ability is used.
+     */
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);
@@ -28,6 +31,7 @@ public final class EnvironmentCard_Firestorm extends EnvironmentCard {
 
     /**
      * {@inheritDoc}
+     * More specifically, an EnvironmentCard_Firestorm copy will be created.
      */
     @Override
     public Card copy() {

@@ -15,6 +15,9 @@ public final class EnvironmentCard_HeartHound extends EnvironmentCard {
                 true, false);
     }
 
+    /**
+     * {@inheritDoc} For EnvironmentCard_HeartHound, the Heart Hound ability is used.
+     */
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cardsEnemy = game.getBoardRow(row);
@@ -38,6 +41,7 @@ public final class EnvironmentCard_HeartHound extends EnvironmentCard {
 
     /**
      * {@inheritDoc}
+     * More specifically, an EnvironmentCard_HeartHound copy will be created.
      */
     @Override
     public Card copy() {

@@ -16,7 +16,7 @@ public final class HeroCard_KingMudface extends HeroCard {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} For HeroCard_KingMudface, the Earth Born ability is used.
      */
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
@@ -29,6 +29,10 @@ public final class HeroCard_KingMudface extends HeroCard {
         return ErrorType.NO_ERROR;
     }
 
+    /**
+     * {@inheritDoc}
+     * More specifically, an HeroCard_KingMudface copy will be created.
+     */
     @Override
     public Card copy() {
         return new HeroCard_KingMudface(this.description, this.colors,

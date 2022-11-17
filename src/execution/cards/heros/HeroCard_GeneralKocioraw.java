@@ -15,6 +15,9 @@ public final class HeroCard_GeneralKocioraw extends HeroCard {
                 false, true);
     }
 
+    /**
+     * {@inheritDoc} For HeroCard_GeneralKocioraw, the Blood Thirst ability is used.
+     */
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);
@@ -28,6 +31,7 @@ public final class HeroCard_GeneralKocioraw extends HeroCard {
 
     /**
      * {@inheritDoc}
+     * More specifically, an HeroCard_GeneralKocioraw copy will be created.
      */
     @Override
     public Card copy() {

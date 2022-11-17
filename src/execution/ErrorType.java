@@ -98,6 +98,12 @@ public enum ErrorType {
             return "Not enough mana to place card on table.";
         }
     },
+    ERROR_MISSING_CARD {
+        @Override
+        public String interpret() {
+            return "No card available at that position.";
+        }
+    },
     // Custom made errors
     CRITICAL_HEART_HOUND_ABILITY_NO_CARD_TO_MOVE {
         @Override
@@ -154,6 +160,12 @@ public enum ErrorType {
         }
     },
     CRITICAL_WARDEN_NO_ABILITY {
+        @Override
+        public String interpret() {
+            return "CRITICAL: Warden has NO ability implemented!";
+        }
+    },
+    CRITICAL_CHECK_PLAYER_VALIDITY_WRONG_PLAYER {
         @Override
         public String interpret() {
             return "CRITICAL: Warden has NO ability implemented!";

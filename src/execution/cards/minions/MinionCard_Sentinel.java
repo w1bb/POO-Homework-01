@@ -18,7 +18,7 @@ public final class MinionCard_Sentinel extends MinionCard {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} For MinionCard_Sentinel, there is NO special ability.
      */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
@@ -28,6 +28,7 @@ public final class MinionCard_Sentinel extends MinionCard {
 
     /**
      * {@inheritDoc}
+     * More specifically, an MinionCard_Sentinel copy will be created.
      */
     @Override
     public Card copy() {

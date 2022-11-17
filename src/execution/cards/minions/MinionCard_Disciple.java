@@ -18,7 +18,7 @@ public final class MinionCard_Disciple extends MinionCard {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} For MinionCard_Disciple, the God's Plan ability is used.
      */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
@@ -32,6 +32,7 @@ public final class MinionCard_Disciple extends MinionCard {
 
     /**
      * {@inheritDoc}
+     * More specifically, an MinionCard_Disciple copy will be created.
      */
     @Override
     public Card copy() {

@@ -113,7 +113,7 @@ public final class Game {
     public boolean checkPlayerValidity(final Player player) {
         if (player != players[0] && player != players[1]) {
             // This should never be reached!
-            System.out.println("CRITICAL: checkPlayerValidity was called with wrong player!");
+            System.out.println(ErrorType.CRITICAL_CHECK_PLAYER_VALIDITY_WRONG_PLAYER.interpret());
             return false;
         }
         return true;

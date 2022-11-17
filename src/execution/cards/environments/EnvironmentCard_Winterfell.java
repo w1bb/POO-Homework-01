@@ -15,8 +15,9 @@ public final class EnvironmentCard_Winterfell extends EnvironmentCard {
                 true, false);
     }
 
+
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} For EnvironmentCard_Winterfell, the Winterfell ability is used.
      */
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
@@ -29,6 +30,10 @@ public final class EnvironmentCard_Winterfell extends EnvironmentCard {
         return ErrorType.NO_ERROR;
     }
 
+    /**
+     * {@inheritDoc}
+     * More specifically, an EnvironmentCard_Winterfell copy will be created.
+     */
     @Override
     public Card copy() {
         return new EnvironmentCard_Winterfell(this.description, this.colors,

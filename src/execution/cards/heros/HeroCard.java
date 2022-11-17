@@ -102,5 +102,9 @@ public abstract class HeroCard extends Card {
         this.abilityCountOnRound = abilityCountOnRound;
     }
 
+    /**
+     * {@inheritDoc}
+     * In this context, a HeroCard copy will be made.
+     */
     public abstract Card copy();
 }

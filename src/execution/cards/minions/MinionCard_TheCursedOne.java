@@ -18,7 +18,7 @@ public final class MinionCard_TheCursedOne extends MinionCard {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} For MinionCard_TheCursedOne, the Shapeshift ability is used.
      */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
@@ -35,6 +35,7 @@ public final class MinionCard_TheCursedOne extends MinionCard {
 
     /**
      * {@inheritDoc}
+     * More specifically, an MinionCard_TheCursedOne copy will be created.
      */
     @Override
     public Card copy() {

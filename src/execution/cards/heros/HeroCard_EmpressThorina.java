@@ -15,6 +15,9 @@ public final class HeroCard_EmpressThorina extends HeroCard {
                 true, false);
     }
 
+    /**
+     * {@inheritDoc} For HeroCard_EmpressThorina, the Low Blow ability is used.
+     */
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);
@@ -38,6 +41,7 @@ public final class HeroCard_EmpressThorina extends HeroCard {
 
     /**
      * {@inheritDoc}
+     * More specifically, an HeroCard_EmpressThorina copy will be created.
      */
     @Override
     public Card copy() {

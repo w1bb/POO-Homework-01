@@ -19,7 +19,7 @@ public final class MinionCard_Miraj extends MinionCard {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} For MinionCard_Miraj, the Skyjack ability is used.
      */
     @Override
     protected ErrorType useAbility(final Game game, final Card attackedCard) {
@@ -36,6 +36,7 @@ public final class MinionCard_Miraj extends MinionCard {
 
     /**
      * {@inheritDoc}
+     * More specifically, an MinionCard_Miraj copy will be created.
      */
     @Override
     public Card copy() {

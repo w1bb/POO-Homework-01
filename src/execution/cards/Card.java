@@ -48,7 +48,7 @@ public abstract class Card {
 
     /**
      * This method is custom-made for each card and represents a way to create a deep-copy of a
-     * given card
+     * given card.
      * @return a deep-copy of the current card
      */
     public abstract Card copy();
