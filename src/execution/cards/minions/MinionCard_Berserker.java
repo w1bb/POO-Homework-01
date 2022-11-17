@@ -3,13 +3,13 @@ package execution.cards.minions;
 import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
-import execution.cards.heros.HeroCard_LordRoyce;
 
 import java.util.ArrayList;
 
-public class MinionCard_Berserker extends MinionCard {
-    public MinionCard_Berserker(String description, ArrayList<String> colors,
-                                int mana, int ownerIdx, int health, int attackDamage) {
+public final class MinionCard_Berserker extends MinionCard {
+    public MinionCard_Berserker(final String description, final ArrayList<String> colors,
+                                final int mana, final int ownerIdx, final int health,
+                                final int attackDamage) {
         super("Berserker", description, colors,
                 mana, ownerIdx, health, attackDamage,
                 false, true, false,
@@ -18,7 +18,7 @@ public class MinionCard_Berserker extends MinionCard {
     }
 
     @Override
-    protected ErrorType useAbility(Game game, Card card) {
+    protected ErrorType useAbility(final Game game, final Card attackedCard) {
         // This should never be reached!
         return ErrorType.CRITICAL_BERSERKER_NO_ABILITY;
     }

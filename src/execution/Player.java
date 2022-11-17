@@ -2,7 +2,6 @@ package execution;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import execution.cards.Card;
 import execution.cards.Deck;
 import execution.cards.heros.HeroCard;
@@ -10,22 +9,22 @@ import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
 
-public class Player {
-    private int playerIdx;
-    private ArrayList<Deck> decks;
+public final class Player {
+    private final int playerIdx;
+    private final ArrayList<Deck> decks;
     private Deck currentDeck;
     private HeroCard currentHeroCard;
     private ArrayList<Card> currentHand;
     private int currentMana;
     private int wins;
 
-    public Player(int playerIdx, ArrayList<Deck> decks) {
+    public Player(final int playerIdx, final ArrayList<Deck> decks) {
         this.playerIdx = playerIdx;
         this.decks = decks;
         this.wins = 0;
     }
 
-    public void reset(int playerDeckId, int shuffleSeed, HeroCard heroCard) {
+    public void reset(final int playerDeckId, final int shuffleSeed, final HeroCard heroCard) {
         this.currentDeck = decks.get(playerDeckId);
         this.currentDeck.shuffle(shuffleSeed);
         this.currentHand = new ArrayList<>();
@@ -41,34 +40,36 @@ public class Player {
         }
     }
 
-    public Card dropCardFromHand(int handIdx) {
-        Card card = currentHand.get(handIdx);
+    public void dropCardFromHand(final int handIdx) {
         currentHand.remove(handIdx); // ?
-        return card;
     }
 
-    public Card getCardFromHand(int handIdx) {
+    public Card getCardFromHand(final int handIdx) {
         return currentHand.get(handIdx);
     }
 
-    public ErrorType placeCardOnBoard(int handIdx, Game game) {
+    public ErrorType placeCardOnBoard(final int handIdx, final Game game) {
         Card card = getCardFromHand(handIdx);
-        if (card.getCardType() == 2)
+        if (card.getCardType() == CardType.ENVIRONMENT) {
             return ErrorType.ERROR_PLACE_ENVIRONMENT_ON_BOARD;
-        if (this.currentMana < card.getMana())
+        }
+        if (this.currentMana < card.getMana()) {
             return ErrorType.ERROR_INSUFFICIENT_MANA_TO_PLACE;
-        MinionCard minionCard = (MinionCard)card;
+        }
+        MinionCard minionCard = (MinionCard) card;
         ErrorType e = ErrorType.NO_ERROR;
         if (minionCard.getAllowPlacementOnFrontRow()) {
-            if (game.isPlayersRow(this.playerIdx, 1))
+            if (game.isPlayersRow(this.playerIdx, 1)) {
                 e = game.pushOnBoardRow(minionCard, 1);
-            else
+            } else {
                 e = game.pushOnBoardRow(minionCard, 2);
+            }
         } else if (minionCard.getAllowPlacementOnBackRow()) {
-            if (game.isPlayersRow(this.playerIdx, 0))
+            if (game.isPlayersRow(this.playerIdx, 0)) {
                 e = game.pushOnBoardRow(minionCard, 0);
-            else
+            } else {
                 e = game.pushOnBoardRow(minionCard, 3);
+            }
         }
         // ? Is this so?
         if (e == ErrorType.NO_ERROR) {
@@ -82,7 +83,7 @@ public class Player {
         return this.currentMana;
     }
 
-    public void setMana(int mana) {
+    public void setMana(final int mana) {
         this.currentMana = mana;
     }
 
@@ -90,18 +91,21 @@ public class Player {
         return this.currentHeroCard;
     }
 
-    public ArrayNode currentHandToArrayNode(ObjectMapper objectMapper) {
+    public ArrayNode currentHandToArrayNode(final ObjectMapper objectMapper) {
         ArrayNode cardsInside = objectMapper.createArrayNode();
-        for (Card card : currentHand)
-            cardsInside.add(card.toObjectNode(objectMapper));
+        for (Card card : currentHand) {
+            cardsInside.add(card.toObjectNode());
+        }
         return cardsInside;
     }
 
-    public ArrayNode currentHandEnvironmentToArrayNode(ObjectMapper objectMapper) {
+    public ArrayNode currentHandEnvironmentToArrayNode(final ObjectMapper objectMapper) {
         ArrayNode cardsInside = objectMapper.createArrayNode();
-        for (Card card : currentHand)
-            if (card.getCardType() == 2)
-                cardsInside.add(card.toObjectNode(objectMapper));
+        for (Card card : currentHand) {
+            if (card.getCardType() == CardType.ENVIRONMENT) {
+                cardsInside.add(card.toObjectNode());
+            }
+        }
         return cardsInside;
     }
 

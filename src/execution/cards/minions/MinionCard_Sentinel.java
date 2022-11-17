@@ -6,9 +6,10 @@ import execution.cards.Card;
 
 import java.util.ArrayList;
 
-public class MinionCard_Sentinel extends MinionCard {
-    public MinionCard_Sentinel(String description, ArrayList<String> colors,
-                               int mana, int ownerIdx, int health, int attackDamage) {
+public final class MinionCard_Sentinel extends MinionCard {
+    public MinionCard_Sentinel(final String description, final ArrayList<String> colors,
+                               final int mana, final int ownerIdx, final int health,
+                               final int attackDamage) {
         super("Sentinel", description, colors,
                 mana, ownerIdx, health, attackDamage,
                 false, true, false,
@@ -17,7 +18,7 @@ public class MinionCard_Sentinel extends MinionCard {
     }
 
     @Override
-    protected ErrorType useAbility(Game game, Card card) {
+    protected ErrorType useAbility(final Game game, final Card attackedCard) {
         // This should never be reached!
         return ErrorType.CRITICAL_SENTINEL_NO_ABILITY;
     }

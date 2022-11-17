@@ -7,15 +7,16 @@ import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
 
-public class EnvironmentCard_Firestorm extends EnvironmentCard {
-    public EnvironmentCard_Firestorm(String description, ArrayList<String> colors, int mana, int ownerIdx) {
+public final class EnvironmentCard_Firestorm extends EnvironmentCard {
+    public EnvironmentCard_Firestorm(final String description, final ArrayList<String> colors,
+                                     final int mana, final int ownerIdx) {
         super("Firestorm", description, colors,
                 mana, ownerIdx,
                 true, false);
     }
 
     @Override
-    protected ErrorType useAbility(Game game, int row) {
+    protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);
         for (MinionCard card : cards) {
             if (card != null) {
@@ -27,6 +28,7 @@ public class EnvironmentCard_Firestorm extends EnvironmentCard {
 
     @Override
     public Card copy() {
-        return new EnvironmentCard_Firestorm(this.description, this.colors, this.mana, this.ownerIdx);
+        return new EnvironmentCard_Firestorm(this.description, this.colors,
+                this.mana, this.ownerIdx);
     }
 }

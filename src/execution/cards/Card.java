@@ -1,7 +1,7 @@
 package execution.cards;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import execution.CardType;
 
 import java.util.ArrayList;
 
@@ -10,11 +10,11 @@ public abstract class Card {
     protected final String description;
     protected final ArrayList<String> colors;
     protected final int mana;
-    protected final int cardType;
+    protected final CardType cardType;
     protected int ownerIdx;
 
-    public Card(String name, String description, ArrayList<String> colors,
-                int mana, int cardType, int ownerIdx) {
+    public Card(final String name, final String description, final ArrayList<String> colors,
+                final int mana, final CardType cardType, final int ownerIdx) {
         this.name = name;
         this.description = description;
         this.colors = colors;
@@ -23,20 +23,22 @@ public abstract class Card {
         this.ownerIdx = ownerIdx;
     }
 
-    public int getCardType() {
+    public final CardType getCardType() {
         return this.cardType;
     }
 
-    public int getOwnerIdx() {
+    public final int getOwnerIdx() {
         return this.ownerIdx;
     }
 
-    public int getMana() { return this.mana; }
+    public final int getMana() {
+        return this.mana;
+    }
 
-    public void setOwnerIdx(int ownerIdx) {
+    public final void setOwnerIdx(final int ownerIdx) {
         this.ownerIdx = ownerIdx;
     }
-    public abstract ObjectNode toObjectNode(ObjectMapper objectMapper);
+    public abstract ObjectNode toObjectNode();
 
     public abstract Card copy();
 }

@@ -6,9 +6,10 @@ import execution.cards.Card;
 
 import java.util.ArrayList;
 
-public class MinionCard_Goliath extends MinionCard {
-    public MinionCard_Goliath(String description, ArrayList<String> colors,
-                              int mana, int ownerIdx, int health, int attackDamage) {
+public final class MinionCard_Goliath extends MinionCard {
+    public MinionCard_Goliath(final String description, final ArrayList<String> colors,
+                              final int mana, final int ownerIdx, final int health,
+                              final int attackDamage) {
         super("Goliath", description, colors,
                 mana, ownerIdx, health, attackDamage,
                 true, true, false,
@@ -17,7 +18,7 @@ public class MinionCard_Goliath extends MinionCard {
     }
 
     @Override
-    protected ErrorType useAbility(Game game, Card card) {
+    protected ErrorType useAbility(final Game game, final Card attackedCard) {
         // This should never be reached!
         return ErrorType.CRITICAL_GOLIATH_NO_ABILITY;
     }

@@ -61,19 +61,19 @@ public enum ErrorType {
             return "Attacker card has already attacked this turn.";
         }
     },
-    ERROR_ATTACKER_NOT_ALLY{
+    ERROR_ATTACKER_NOT_ALLY {
         @Override
         public String interpret() {
             return "Attacked card does not belong to the current player.";
         }
     },
-    ERROR_ATTACKED_CARD_NOT_ENEMY{
+    ERROR_ATTACKED_CARD_NOT_ENEMY {
         @Override
         public String interpret() {
             return "Attacked card does not belong to the enemy.";
         }
     },
-    ERROR_ATTACKED_CARD_NOT_TANK{
+    ERROR_ATTACKED_CARD_NOT_TANK {
         @Override
         public String interpret() {
             return "Attacked card is not of type 'Tank'.";
@@ -85,67 +85,67 @@ public enum ErrorType {
             return "Cannot place environment card on table.";
         }
     },
-    ERROR_INSUFFICIENT_MANA_TO_PLACE{
+    ERROR_INSUFFICIENT_MANA_TO_PLACE {
         @Override
         public String interpret() {
             return "Not enough mana to place card on table.";
         }
     },
-    CRITICAL_HEART_HOUND_ABILITY_NO_CARD_TO_MOVE{
+    CRITICAL_HEART_HOUND_ABILITY_NO_CARD_TO_MOVE {
         @Override
         public String interpret() {
-            return "??";
+            return "??"; // TODO
         }
     },
-    CRITICAL_EMPRESS_THORINA_ATTACKS_NULL{
+    CRITICAL_EMPRESS_THORINA_ATTACKS_NULL {
         @Override
         public String interpret() {
             return "CRITICAL: Empress Thorina has nothing to attack!";
         }
     },
-    CRITICAL_LORD_ROYCE_FREEZES_NOTHING{
+    CRITICAL_LORD_ROYCE_FREEZES_NOTHING {
         @Override
         public String interpret() {
             return "CRITICAL: Lord Royce has nothing to freeze!";
         }
     },
-    CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS{
+    CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS {
         @Override
         public String interpret() {
             return "CRITICAL: Can only use attack on minion cards.";
         }
     },
-    CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS_HEROS{
+    CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS_HEROS {
         @Override
         public String interpret() {
             return "CRITICAL: Can only use attack on minion/hero cards.";
         }
     },
-    CRITICAL_MINIONCARD_CAN_ONLY_ABILITY_MINIONS{
+    CRITICAL_MINIONCARD_CAN_ONLY_ABILITY_MINIONS {
         @Override
         public String interpret() {
             return "CRITICAL: Can only use ability on minion cards.";
         }
     },
-    CRITICAL_BERSERKER_NO_ABILITY{
+    CRITICAL_BERSERKER_NO_ABILITY {
         @Override
         public String interpret() {
             return "CRITICAL: Berserker has NO ability implemented.";
         }
     },
-    CRITICAL_GOLIATH_NO_ABILITY{
+    CRITICAL_GOLIATH_NO_ABILITY {
         @Override
         public String interpret() {
             return "CRITICAL: Goliath has NO ability implemented.";
         }
     },
-    CRITICAL_SENTINEL_NO_ABILITY{
+    CRITICAL_SENTINEL_NO_ABILITY {
         @Override
         public String interpret() {
             return "CRITICAL: Sentinel has NO ability implemented.";
         }
     },
-    CRITICAL_WARDEN_NO_ABILITY{
+    CRITICAL_WARDEN_NO_ABILITY {
         @Override
         public String interpret() {
             return "CRITICAL: Warden has NO ability implemented.";

@@ -3,25 +3,27 @@ package execution.cards.heros;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import execution.CardType;
 import execution.ErrorType;
 import execution.Game;
 import execution.Player;
 import execution.cards.Card;
-import execution.cards.environments.EnvironmentCard_Winterfell;
 
 import java.util.ArrayList;
 
 public abstract class HeroCard extends Card {
+    protected static final int DEFAULT_HEALTH = 30;
+
     protected int health;
-    protected Boolean allowAbilityOnEnemy;
-    protected Boolean allowAbilityOnSelf;
+    protected boolean allowAbilityOnEnemy;
+    protected boolean allowAbilityOnSelf;
 
     protected int abilityCountOnRound;
 
-    public HeroCard(String name, String description, ArrayList<String> colors,
-                    int mana, int ownerIdx, int health,
-                    Boolean allowAbilityOnEnemy, Boolean allowAbilityOnSelf) {
-        super(name, description, colors, mana, 0, ownerIdx);
+    public HeroCard(final String name, final String description, final ArrayList<String> colors,
+                    final int mana, final int ownerIdx, final int health,
+                    final boolean allowAbilityOnEnemy, final boolean allowAbilityOnSelf) {
+        super(name, description, colors, mana, CardType.HERO, ownerIdx);
         this.health = health;
         this.allowAbilityOnEnemy = allowAbilityOnEnemy;
         this.allowAbilityOnSelf = allowAbilityOnSelf;
@@ -29,12 +31,11 @@ public abstract class HeroCard extends Card {
         this.abilityCountOnRound = 0;
     }
 
-    public Boolean damage(int damagePoints) {
+    public final void damage(final int damagePoints) {
         this.health = Math.max(0, this.health - damagePoints);
-        return (this.health == 0);
     }
 
-    public ErrorType tryUseAbility(Game game, int row, Player player) {
+    public final ErrorType tryUseAbility(final Game game, final int row, final Player player) {
         if (player.getMana() < this.mana) {
             return ErrorType.ERROR_INSUFFICIENT_MANA_FOR_HERO;
         }
@@ -57,7 +58,9 @@ public abstract class HeroCard extends Card {
 
     protected abstract ErrorType useAbility(Game game, int row);
 
-    public ObjectNode toObjectNode(ObjectMapper objectMapper) {
+    @Override
+    public final ObjectNode toObjectNode() {
+        ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("mana", this.mana);
         objectNode.put("health", this.health);
@@ -65,16 +68,19 @@ public abstract class HeroCard extends Card {
         objectNode.put("name", this.name);
 
         ArrayNode colorsNode = objectMapper.createArrayNode();
-        for (String color : colors)
+        for (String color : colors) {
             colorsNode.add(color);
+        }
         objectNode.set("colors", colorsNode);
 
         return objectNode;
     }
 
-    public int getHealth() { return this.health; }
+    public final int getHealth() {
+        return this.health;
+    }
 
-    public void setAbilityCountOnRound(int abilityCountOnRound) {
+    public final void setAbilityCountOnRound(final int abilityCountOnRound) {
         this.abilityCountOnRound = abilityCountOnRound;
     }
 

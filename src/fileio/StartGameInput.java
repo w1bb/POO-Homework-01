@@ -15,13 +15,6 @@ public final class StartGameInput {
     public StartGameInput() {
     }
 
-    public Game getGame(Player[] players) {
-        HeroCard playerOneHeroCard = (HeroCard)playerOneHero.toCard(0);
-        HeroCard playerTwoHeroCard = (HeroCard)playerTwoHero.toCard(1);
-        return new Game(players, startingPlayer - 1, playerOneDeckIdx, playerTwoDeckIdx, shuffleSeed,
-                playerOneHeroCard, playerTwoHeroCard);
-    }
-
     public int getPlayerOneDeckIdx() {
         return playerOneDeckIdx;
     }
@@ -68,6 +61,13 @@ public final class StartGameInput {
 
     public void setStartingPlayer(final int startingPlayer) {
         this.startingPlayer = startingPlayer;
+    }
+
+    public Game toGame(final Player[] players) {
+        HeroCard playerOneHeroCard = (HeroCard) playerOneHero.toCard(0);
+        HeroCard playerTwoHeroCard = (HeroCard) playerTwoHero.toCard(1);
+        return new Game(players, startingPlayer - 1, playerOneDeckIdx, playerTwoDeckIdx,
+                shuffleSeed, playerOneHeroCard, playerTwoHeroCard);
     }
 
     @Override

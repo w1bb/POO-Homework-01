@@ -6,26 +6,26 @@ import execution.cards.Card;
 import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
-public class HeroCard_LordRoyce extends HeroCard {
-    public HeroCard_LordRoyce(String description, ArrayList<String> colors, int mana, int ownerIdx) {
+public final class HeroCard_LordRoyce extends HeroCard {
+    public HeroCard_LordRoyce(final String description, final ArrayList<String> colors,
+                              final int mana, final int ownerIdx) {
         super("Lord Royce", description, colors,
-                mana, ownerIdx, 30,
+                mana, ownerIdx, HeroCard.DEFAULT_HEALTH,
                 true, false);
     }
 
     @Override
-    protected ErrorType useAbility(Game game, int row) {
+    protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);
         MinionCard cardToChange = null;
         for (MinionCard card : cards) {
             if (card != null) {
-                if (cardToChange == null)
+                if (cardToChange == null) {
                     cardToChange = card;
-                else if (card.getAttackDamage() > cardToChange.getAttackDamage())
+                } else if (card.getAttackDamage() > cardToChange.getAttackDamage()) {
                     cardToChange = card;
+                }
             }
         }
         if (cardToChange == null) {

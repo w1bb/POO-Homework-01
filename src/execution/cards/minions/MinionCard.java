@@ -3,11 +3,11 @@ package execution.cards.minions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import execution.CardType;
 import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
 import execution.cards.heros.HeroCard;
-import fileio.CardInput;
 
 import java.util.ArrayList;
 
@@ -26,13 +26,13 @@ public abstract class MinionCard extends Card {
     protected int attackCountOnRound;
     protected int abilityCountOnRound;
 
-    MinionCard(String name, String description, ArrayList<String> colors,
-               int mana, int ownerIdx, int health, int attackDamage,
-               Boolean tankStatus,
-               Boolean allowAttackOnEnemy, Boolean allowAttackOnSelf,
-               Boolean allowAbilityOnEnemy, Boolean allowAbilityOnSelf,
-               Boolean allowPlacementOnFrontRow, Boolean allowPlacementOnBackRow) {
-        super(name, description, colors, mana, 1, ownerIdx);
+    MinionCard(final String name, final String description, final ArrayList<String> colors,
+               final int mana, final int ownerIdx, final int health, final int attackDamage,
+               final Boolean tankStatus,
+               final Boolean allowAttackOnEnemy, final Boolean allowAttackOnSelf,
+               final Boolean allowAbilityOnEnemy, final Boolean allowAbilityOnSelf,
+               final Boolean allowPlacementOnFrontRow, final Boolean allowPlacementOnBackRow) {
+        super(name, description, colors, mana, CardType.MINION, ownerIdx);
         this.health = health;
         this.attackDamage = attackDamage;
         this.tankStatus = tankStatus;
@@ -48,36 +48,40 @@ public abstract class MinionCard extends Card {
         this.abilityCountOnRound = 0;
     }
 
-    public void unfreeze() {
+    public final void unfreeze() {
         this.frozenStatus = false;
     }
 
-    public void freeze() {
+    public final void freeze() {
         this.frozenStatus = true;
     }
 
-    public Boolean isFrozen() { return this.frozenStatus; }
+    public final Boolean isFrozen() {
+        return this.frozenStatus;
+    }
 
-    public Boolean isTank() {
+    public final Boolean isTank() {
         return this.tankStatus;
     }
 
-    public int getHealth() { return this.health; }
+    public final int getHealth() {
+        return this.health;
+    }
 
-    public void setHealth(int health) {
+    public final void setHealth(final int health) {
         this.health = health;
     }
 
-    public int getAttackDamage() {
+    public final int getAttackDamage() {
         return attackDamage;
     }
 
-    public void setAttackDamage(int attackDamage) {
+    public final void setAttackDamage(final int attackDamage) {
         this.attackDamage = attackDamage;
     }
 
-    public ErrorType tryUseAbility(Game game, Card card) {
-        if (card.getCardType() != 1) {
+    public final ErrorType tryUseAbility(final Game game, final Card card) {
+        if (card.getCardType() != CardType.MINION) {
             // This should never be reached!
             return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS;
         }
@@ -94,7 +98,7 @@ public abstract class MinionCard extends Card {
             if (this.ownerIdx == card.getOwnerIdx()) {
                 return ErrorType.ERROR_ATTACKED_CARD_NOT_ENEMY;
             }
-            if (game.isTankOnEnemyLane() && !((MinionCard)card).tankStatus) {
+            if (game.isTankOnEnemyLane() && !((MinionCard) card).tankStatus) {
                 return ErrorType.ERROR_ATTACKED_CARD_NOT_TANK;
             }
         }
@@ -106,18 +110,18 @@ public abstract class MinionCard extends Card {
         return returnValue;
     }
 
-    protected abstract ErrorType useAbility(Game game, Card card);
+    protected abstract ErrorType useAbility(Game game, Card attackedCard);
 
-    public void damage(int damagePoints) {
+    public final void damage(final int damagePoints) {
         this.health = Math.max(0, this.health - damagePoints);
     }
 
-    public void destroy() {
+    public final void destroy() {
         this.health = 0;
     }
 
-    public ErrorType tryUseAttack(Game game, Card card) {
-        if (card.getCardType() != 0 && card.getCardType() != 1) {
+    public final ErrorType tryUseAttack(final Game game, final Card card) {
+        if (card.getCardType() != CardType.HERO && card.getCardType() != CardType.MINION) {
             // This should never be reached!
             return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS_HEROS;
         }
@@ -130,8 +134,11 @@ public abstract class MinionCard extends Card {
         if ((this.ownerIdx == card.getOwnerIdx()) && !this.allowAttackOnSelf) {
             return ErrorType.ERROR_ATTACKED_CARD_NOT_ENEMY;
         }
-        if ((this.ownerIdx != card.getOwnerIdx()) && this.allowAttackOnEnemy && game.isTankOnEnemyLane()) {
-            if (card.getCardType() != 1 || (card.getCardType() == 1 && !((MinionCard)card).tankStatus)) {
+        if ((this.ownerIdx != card.getOwnerIdx()) && this.allowAttackOnEnemy
+                && game.isTankOnEnemyLane()) {
+            if (card.getCardType() != CardType.MINION
+                    || (card.getCardType() == CardType.MINION
+                        && !((MinionCard) card).tankStatus)) {
                 return ErrorType.ERROR_ATTACKED_CARD_NOT_TANK;
             }
         }
@@ -143,19 +150,22 @@ public abstract class MinionCard extends Card {
         return returnValue;
     }
 
-    protected ErrorType useAttack(Card card) {
-        if (card.getCardType() == 0) {
-            ((HeroCard)card).damage(this.attackDamage);
+    protected final ErrorType useAttack(final Card card) {
+        if (card.getCardType() == CardType.HERO) {
+            ((HeroCard) card).damage(this.attackDamage);
             return ErrorType.NO_ERROR;
-        } else if (card.getCardType() == 1) {
-            ((MinionCard)card).damage(this.attackDamage);
+        } else if (card.getCardType() == CardType.MINION) {
+            ((MinionCard) card).damage(this.attackDamage);
             return ErrorType.NO_ERROR;
         }
-        // This should never be reached! It might be a little redundant, but better be safe than sorry.
+        // This should never be reached! It might be a little redundant,
+        // but better be safe than sorry.
         return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ATTACK_MINIONS_HEROS;
     }
 
-    public ObjectNode toObjectNode(ObjectMapper objectMapper) {
+    @Override
+    public final ObjectNode toObjectNode() {
+        ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("mana", this.mana);
         objectNode.put("health", this.health);
@@ -164,22 +174,27 @@ public abstract class MinionCard extends Card {
         objectNode.put("attackDamage", this.attackDamage);
 
         ArrayNode colorsNode = objectMapper.createArrayNode();
-        for (String color : colors)
+        for (String color : colors) {
             colorsNode.add(color);
+        }
         objectNode.set("colors", colorsNode);
 
         return objectNode;
     }
 
-    public Boolean getAllowPlacementOnFrontRow() { return allowPlacementOnFrontRow; }
+    public final Boolean getAllowPlacementOnFrontRow() {
+        return allowPlacementOnFrontRow;
+    }
 
-    public Boolean getAllowPlacementOnBackRow() { return allowPlacementOnBackRow; }
+    public final Boolean getAllowPlacementOnBackRow() {
+        return allowPlacementOnBackRow;
+    }
 
-    public void setAttackCountOnRound(int attackCountOnRound) {
+    public final void setAttackCountOnRound(final int attackCountOnRound) {
         this.attackCountOnRound = attackCountOnRound;
     }
 
-    public void setAbilityCountOnRound(int abilityCountOnRound) {
+    public final void setAbilityCountOnRound(final int abilityCountOnRound) {
         this.abilityCountOnRound = abilityCountOnRound;
     }
 

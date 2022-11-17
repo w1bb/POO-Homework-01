@@ -68,12 +68,10 @@ public final class Main {
         Input inputData = objectMapper.readValue(new File(CheckerConstants.TESTS_PATH + filePath1),
                 Input.class);
 
-        // TODO add here the entry point to your implementation
-        System.out.println("entered this");
-        Interpreter interpreter = new Interpreter(inputData, objectMapper);
+        // Entry point
+        Interpreter interpreter = new Interpreter(inputData);
         interpreter.runGames();
         ArrayNode output = interpreter.getOutput();
-        System.out.println(filePath2);
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);

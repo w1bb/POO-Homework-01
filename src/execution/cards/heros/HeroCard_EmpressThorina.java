@@ -3,30 +3,29 @@ package execution.cards.heros;
 import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
-import execution.cards.environments.EnvironmentCard_HeartHound;
 import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
-public class HeroCard_EmpressThorina extends HeroCard {
-    public HeroCard_EmpressThorina(String description, ArrayList<String> colors, int mana, int ownerIdx) {
+public final class HeroCard_EmpressThorina extends HeroCard {
+    public HeroCard_EmpressThorina(final String description, final ArrayList<String> colors,
+                                   final int mana, final int ownerIdx) {
         super("Empress Thorina", description, colors,
-                mana, ownerIdx, 30,
+                mana, ownerIdx, HeroCard.DEFAULT_HEALTH,
                 true, false);
     }
 
     @Override
-    protected ErrorType useAbility(Game game, int row) {
+    protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);
         MinionCard cardToChange = null;
         for (MinionCard card : cards) {
             if (card != null) {
-                if (cardToChange == null)
+                if (cardToChange == null) {
                     cardToChange = card;
-                else if (card.getHealth() > cardToChange.getHealth())
+                } else if (card.getHealth() > cardToChange.getHealth()) {
                     cardToChange = card;
+                }
             }
         }
         if (cardToChange == null) {
@@ -39,6 +38,7 @@ public class HeroCard_EmpressThorina extends HeroCard {
 
     @Override
     public Card copy() {
-        return new HeroCard_EmpressThorina(this.description, this.colors, this.mana, this.ownerIdx);
+        return new HeroCard_EmpressThorina(this.description, this.colors,
+                this.mana, this.ownerIdx);
     }
 }

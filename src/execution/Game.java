@@ -7,11 +7,10 @@ import execution.cards.heros.HeroCard;
 import execution.cards.minions.MinionCard;
 
 public class Game {
-    private Player[] players;
-    private int currentRound;
-    private int initialPlayer;
+    private final Player[] players;
+    private final int initialPlayer;
+    private final MinionCard[][] board;
     private int currentPlayerTurn;
-    private MinionCard[][] board;
     private int manaToAdd;
     private boolean ended;
 
@@ -22,13 +21,11 @@ public class Game {
         this.players = players;
         this.players[0].reset(playerOneDeckIdx, shuffleSeed, playerOneHeroCard);
         this.players[1].reset(playerTwoDeckIdx, shuffleSeed, playerTwoHeroCard);
-        this.currentRound = 0;
         this.initialPlayer = initialPlayer;
         this.currentPlayerTurn = initialPlayer;
         this.board = new MinionCard[4][5];
         this.manaToAdd = 1;
         this.ended = false;
-
         this.newRound();
     }
 
@@ -55,9 +52,9 @@ public class Game {
         for (Card[] cards : board) {
             for (Card card : cards) {
                 if (card != null) {
-                    if (card.getCardType() == 0) {
+                    if (card.getCardType() == CardType.HERO) {
                         ((HeroCard) card).setAbilityCountOnRound(0);
-                    } else if (card.getCardType() == 1) {
+                    } else if (card.getCardType() == CardType.MINION) {
                         ((MinionCard) card).setAttackCountOnRound(0);
                         ((MinionCard) card).setAbilityCountOnRound(0);
                     }
@@ -66,7 +63,10 @@ public class Game {
         }
         players[0].getHeroCard().setAbilityCountOnRound(0);
         players[1].getHeroCard().setAbilityCountOnRound(0);
-        currentRound++;
+    }
+
+    public final int getRowLength() {
+        return this.board.length;
     }
 
     public MinionCard[] getBoardRow(int row) {
@@ -81,7 +81,7 @@ public class Game {
         return null;
     }
 
-    public Boolean checkPlayerValidity(Player player) {
+    public boolean checkPlayerValidity(Player player) {
         if (player != players[0] && player != players[1]) {
             // This should never be reached!
             System.out.println("CRITICAL: checkPlayerValidity was called with wrong player!");
@@ -90,7 +90,7 @@ public class Game {
         return true;
     }
 
-    public Boolean checkRowValidity(int row) {
+    public boolean checkRowValidity(int row) {
         if (row < 0 || row > board.length) {
             // This should never be reached!
             System.out.println("CRITICAL: checkRowValidity was called with wrong row (" + row + ")!");
@@ -99,8 +99,8 @@ public class Game {
         return true;
     }
 
-    public Boolean checkColumnValidity(int column) {
-        if (column < 0 || column > 4) {
+    public boolean checkColumnValidity(int column) {
+        if (column < 0 || column > board[0].length) {
             // This should never be reached!
             System.out.println("CRITICAL: checkColumnValidity was called with wrong row (" + column + ")!");
             return false;
@@ -108,7 +108,7 @@ public class Game {
         return true;
     }
 
-    public Boolean isTankOnEnemyLane() {
+    public boolean isTankOnEnemyLane() {
         for (int row = 0; row < board.length; ++row) {
             if (!isPlayersRow(players[currentPlayerTurn], row)) {
                 for (MinionCard card : board[row]) {
@@ -128,16 +128,6 @@ public class Game {
 
     public Boolean isPlayersRow(int playerIdx, int row) {
         return isPlayersRow(players[playerIdx], row);
-    }
-
-    public void addCardOnBoard(Card card, int row, int column) {
-        if (checkRowValidity(row) && checkColumnValidity(column))
-            board[row][column] = ((MinionCard)card);
-    }
-
-    public void removeCardOnBoard(int row, int column) {
-        if (checkRowValidity(row) && checkColumnValidity(column))
-            board[row][column] = null;
     }
 
     public ErrorType pushOnBoardRow(MinionCard minionCard, int row) {
@@ -180,7 +170,7 @@ public class Game {
             ArrayNode cardsInsideRow = objectMapper.createArrayNode();
             for (MinionCard card : rowBoard) {
                 if (card != null)
-                    cardsInsideRow.add(card.toObjectNode(objectMapper));
+                    cardsInsideRow.add(card.toObjectNode());
             }
             cardsInside.add(cardsInsideRow);
         }
@@ -192,22 +182,26 @@ public class Game {
         for (MinionCard[] rowBoard : board)
             for (MinionCard card : rowBoard) {
                 if (card != null && card.isFrozen())
-                    frozenCardsInside.add(card.toObjectNode(objectMapper));
+                    frozenCardsInside.add(card.toObjectNode());
             }
         return frozenCardsInside;
     }
 
     public boolean isOver() {
         if (!ended) {
-            ended = (players[0].getHeroCard().getHealth() <= 0 ||
-                    players[1].getHeroCard().getHealth() <= 0);
-            if (ended) {
-                if (players[0].getHeroCard().getHealth() > 0)
-                    players[0].addVictory();
-                else
-                    players[1].addVictory();
+            if (players[0].getHeroCard().getHealth() <= 0 &&
+                players[1].getHeroCard().getHealth() <= 0) {
+                // This should never be reached!
+                System.out.println("CRITICAL: Both players are dead!");
+                return (ended = true);
+            } else if (players[0].getHeroCard().getHealth() <= 0) {
+                players[1].addVictory();
+                return (ended = true);
+            } else if (players[1].getHeroCard().getHealth() <= 0) {
+                players[0].addVictory();
+                return (ended = true);
             }
-            return ended;
+            return false;
         }
         return true;
     }

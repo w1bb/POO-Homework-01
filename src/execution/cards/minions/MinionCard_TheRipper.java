@@ -1,14 +1,16 @@
 package execution.cards.minions;
 
+import execution.CardType;
 import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
 
 import java.util.ArrayList;
 
-public class MinionCard_TheRipper extends MinionCard {
-    public MinionCard_TheRipper(String description, ArrayList<String> colors,
-                                int mana, int ownerIdx, int health, int attackDamage) {
+public final class MinionCard_TheRipper extends MinionCard {
+    public MinionCard_TheRipper(final String description, final ArrayList<String> colors,
+                                final int mana, final int ownerIdx, final int health,
+                                final int attackDamage) {
         super("The Ripper", description, colors,
                 mana, ownerIdx, health, attackDamage,
                 false, true, false,
@@ -17,13 +19,14 @@ public class MinionCard_TheRipper extends MinionCard {
     }
 
     @Override
-    protected ErrorType useAbility(Game game, Card card) {
-        if (card.getCardType() != 1) {
+    protected ErrorType useAbility(final Game game, final Card attackedCard) {
+        if (attackedCard.getCardType() != CardType.MINION) {
             // This should never be reached!
             return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ABILITY_MINIONS;
         }
         // Remove 2 AD from the card
-        ((MinionCard)card).attackDamage = Math.max(((MinionCard)card).attackDamage - 2, 0);
+        ((MinionCard) attackedCard).attackDamage =
+                Math.max(((MinionCard) attackedCard).attackDamage - 2, 0);
         return ErrorType.NO_ERROR;
     }
 
