@@ -7,7 +7,17 @@ import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a King Mudface card.
+ */
 public final class HeroCard_KingMudface extends HeroCard {
+    /**
+     * This constructor creates a new HeroCard_KingMudface (King Mudface) card.
+     * @param description a brief description of the card
+     * @param colors the colors found on the card
+     * @param mana the mana cost of the card
+     * @param ownerIdx the owner's index
+     */
     public HeroCard_KingMudface(final String description, final ArrayList<String> colors,
                                 final int mana, final int ownerIdx) {
         super("King Mudface", description, colors,
@@ -21,6 +31,7 @@ public final class HeroCard_KingMudface extends HeroCard {
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);
+        // Increase HP for each card in a row
         for (MinionCard card : cards) {
             if (card != null) {
                 card.setHealth(card.getHealth() + 1);

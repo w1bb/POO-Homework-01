@@ -7,7 +7,17 @@ import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a Lord Royce card.
+ */
 public final class HeroCard_LordRoyce extends HeroCard {
+    /**
+     * This constructor creates a new HeroCard_LordRoyce (Lord Royce) card.
+     * @param description a brief description of the card
+     * @param colors the colors found on the card
+     * @param mana the mana cost of the card
+     * @param ownerIdx the owner's index
+     */
     public HeroCard_LordRoyce(final String description, final ArrayList<String> colors,
                               final int mana, final int ownerIdx) {
         super("Lord Royce", description, colors,

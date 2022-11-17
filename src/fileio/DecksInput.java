@@ -50,7 +50,7 @@ public final class DecksInput {
             for (CardInput cardInput : decks.get(deckIdx)) {
                 cards.add(cardInput.toCard(ownerIdx));
             }
-            decksReturn.add(new Deck(deckIdx, ownerIdx, cards));
+            decksReturn.add(new Deck(cards));
         }
         return decksReturn;
     }

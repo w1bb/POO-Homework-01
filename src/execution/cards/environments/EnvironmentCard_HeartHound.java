@@ -7,7 +7,17 @@ import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a Heart Hound card.
+ */
 public final class EnvironmentCard_HeartHound extends EnvironmentCard {
+    /**
+     * This constructor creates a new EnvironmentCard_HeartHound (Heart Hound) card.
+     * @param description a brief description of the card
+     * @param colors the colors found on the card
+     * @param mana the mana cost of the card
+     * @param ownerIdx the owner's index
+     */
     public EnvironmentCard_HeartHound(final String description, final ArrayList<String> colors,
                                       final int mana, final int ownerIdx) {
         super("Heart Hound", description, colors,
@@ -21,6 +31,7 @@ public final class EnvironmentCard_HeartHound extends EnvironmentCard {
     @Override
     protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cardsEnemy = game.getBoardRow(row);
+        // Find the card with most HP
         MinionCard cardToMove = null;
         for (MinionCard card : cardsEnemy) {
             if (card != null) {
@@ -35,6 +46,7 @@ public final class EnvironmentCard_HeartHound extends EnvironmentCard {
             // This should never be reached!
             return ErrorType.CRITICAL_HEART_HOUND_ABILITY_NO_CARD_TO_MOVE;
         }
+        // Move the card on the other side of the board
         cardToMove.setOwnerIdx(Game.BOARD_COLUMNS - cardToMove.getOwnerIdx() - 1);
         return game.pushOnBoardRow(cardToMove, Game.BOARD_COLUMNS - row - 1);
     }
