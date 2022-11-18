@@ -1,13 +1,24 @@
 package execution.cards.minions;
 
-import execution.CardType;
+import execution.cards.CardType;
 import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a Disciple card.
+ */
 public final class MinionCard_Disciple extends MinionCard {
+    /**
+     * This constructor creates a new MinionCard_Disciple (Disciple) card.
+     * @param description a brief description of the card
+     * @param colors the colors found on the card
+     * @param mana the mana cost of the card
+     * @param ownerIdx the owner's index
+     * @param health the card's original health
+     */
     public MinionCard_Disciple(final String description, final ArrayList<String> colors,
                                final int mana, final int ownerIdx, final int health) {
         super("Disciple", description, colors,
@@ -26,6 +37,7 @@ public final class MinionCard_Disciple extends MinionCard {
             // This should never be reached!
             return ErrorType.CRITICAL_MINIONCARD_CAN_ONLY_ABILITY_MINIONS;
         }
+        // Increase card's health
         ((MinionCard) attackedCard).health += 2;
         return ErrorType.NO_ERROR;
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import execution.cards.Card;
+import execution.cards.CardType;
 import execution.cards.environments.EnvironmentCard;
 import execution.cards.heros.HeroCard;
 import execution.cards.minions.MinionCard;

@@ -1,7 +1,7 @@
 package execution.cards.minions;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import execution.CardType;
+import execution.cards.CardType;
 import execution.ErrorType;
 import execution.Game;
 import execution.cards.Card;

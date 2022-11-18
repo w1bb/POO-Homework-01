@@ -1,5 +1,10 @@
 package execution;
 
+/**
+ * This data type represents a better way to interpret errors that could occur during the execution
+ * of the game. All new errors should be implemented here and interpreted using the
+ * <code>interpret()</code> method provided.
+ */
 public enum ErrorType {
     // No error at all
     NO_ERROR {

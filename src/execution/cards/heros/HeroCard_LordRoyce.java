@@ -32,6 +32,7 @@ public final class HeroCard_LordRoyce extends HeroCard {
     protected ErrorType useAbility(final Game game, final int row) {
         MinionCard[] cards = game.getBoardRow(row);
         MinionCard cardToChange = null;
+        // Find the card with most AD
         for (MinionCard card : cards) {
             if (card != null) {
                 if (cardToChange == null) {
@@ -45,6 +46,7 @@ public final class HeroCard_LordRoyce extends HeroCard {
             // This should never be reached
             return ErrorType.CRITICAL_LORD_ROYCE_FREEZES_NOTHING;
         }
+        // Freeze said card
         cardToChange.freeze();
         return ErrorType.NO_ERROR;
     }

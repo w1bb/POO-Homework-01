@@ -3,6 +3,7 @@ package execution;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import execution.cards.Card;
+import execution.cards.CardType;
 import execution.cards.Deck;
 import execution.cards.heros.HeroCard;
 import execution.cards.minions.MinionCard;

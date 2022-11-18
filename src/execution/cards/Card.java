@@ -3,7 +3,6 @@ package execution.cards;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import execution.CardType;
 
 import java.util.ArrayList;
 
