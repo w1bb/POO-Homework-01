@@ -28,7 +28,7 @@ public enum ErrorType {
     ERROR_BOARD_ROW_FULL_ALT1 {
         @Override
         public String interpret() {
-            return "Cannot steal enemy card since the player's row is full";
+            return "Cannot steal enemy card since the player's row is full.";
         }
     },
     ERROR_INSUFFICIENT_MANA_FOR_HERO {

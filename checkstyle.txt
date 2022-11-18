@@ -1,5 +1,4 @@
 Starting audit...
-[ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/fileio/CardInput.java:11:31: Using the '.*' form of import should be avoided - execution.cards.minions.*. [AvoidStarImport]
 [ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/execution/cards/minions/MinionCard_Disciple.java:13:20: Name 'MinionCard_Disciple' must match pattern '^[A-Z][a-zA-Z0-9]*$'. [TypeName]
 [ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/execution/cards/minions/MinionCard_Miraj.java:13:20: Name 'MinionCard_Miraj' must match pattern '^[A-Z][a-zA-Z0-9]*$'. [TypeName]
 [ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/execution/cards/minions/MinionCard_Goliath.java:12:20: Name 'MinionCard_Goliath' must match pattern '^[A-Z][a-zA-Z0-9]*$'. [TypeName]
@@ -16,4 +15,4 @@ Starting audit...
 [ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/execution/cards/heros/HeroCard_GeneralKocioraw.java:13:20: Name 'HeroCard_GeneralKocioraw' must match pattern '^[A-Z][a-zA-Z0-9]*$'. [TypeName]
 [ERROR] /home/wi/Documents/POO/POO-Homework-01/./src/execution/cards/heros/HeroCard_EmpressThorina.java:13:20: Name 'HeroCard_EmpressThorina' must match pattern '^[A-Z][a-zA-Z0-9]*$'. [TypeName]
 Audit done.
-Checkstyle ends with 16 errors.
+Checkstyle ends with 15 errors.

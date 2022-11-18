@@ -273,28 +273,6 @@ public final class Game {
     }
 
     /**
-     * This method converts the board into a printable ArrayNode format.
-     * @return the converted value
-     */
-    public ArrayNode boardToArrayNode() {
-        // Create the ArrayNode that will be returned
-        ObjectMapper objectMapper = new ObjectMapper();
-        ArrayNode cardsInside = objectMapper.createArrayNode();
-        // Add each card individually
-        for (MinionCard[] rowBoard : board) {
-            ArrayNode cardsInsideRow = objectMapper.createArrayNode();
-            for (MinionCard card : rowBoard) {
-                if (card != null) {
-                    cardsInsideRow.add(card.toObjectNode());
-                }
-            }
-            cardsInside.add(cardsInsideRow);
-        }
-        // Return the constructed ArrayNode
-        return cardsInside;
-    }
-
-    /**
      * This method checks if the game is over or not. A game is considered over once one of the
      * players holds a hero card with 0 health.
      * @return <code>true</code> if and only if at least one player's hero has no more health
@@ -320,6 +298,28 @@ public final class Game {
             return true;
         }
         return true;
+    }
+
+    /**
+     * This method converts the board into a printable ArrayNode format.
+     * @return the converted value
+     */
+    public ArrayNode boardToArrayNode() {
+        // Create the ArrayNode that will be returned
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode cardsInside = objectMapper.createArrayNode();
+        // Add each card individually
+        for (MinionCard[] rowBoard : board) {
+            ArrayNode cardsInsideRow = objectMapper.createArrayNode();
+            for (MinionCard card : rowBoard) {
+                if (card != null) {
+                    cardsInsideRow.add(card.toObjectNode());
+                }
+            }
+            cardsInside.add(cardsInsideRow);
+        }
+        // Return the constructed ArrayNode
+        return cardsInside;
     }
 
     /**

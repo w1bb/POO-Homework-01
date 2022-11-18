@@ -8,7 +8,14 @@ import execution.cards.heros.HeroCard_EmpressThorina;
 import execution.cards.heros.HeroCard_GeneralKocioraw;
 import execution.cards.heros.HeroCard_KingMudface;
 import execution.cards.heros.HeroCard_LordRoyce;
-import execution.cards.minions.*;
+import execution.cards.minions.MinionCard_Berserker;
+import execution.cards.minions.MinionCard_Disciple;
+import execution.cards.minions.MinionCard_Goliath;
+import execution.cards.minions.MinionCard_Miraj;
+import execution.cards.minions.MinionCard_Sentinel;
+import execution.cards.minions.MinionCard_TheCursedOne;
+import execution.cards.minions.MinionCard_TheRipper;
+import execution.cards.minions.MinionCard_Warden;
 
 import java.util.ArrayList;
 
