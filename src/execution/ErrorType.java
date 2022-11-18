@@ -18,11 +18,17 @@ public enum ErrorType {
         /**
          * {@inheritDoc}
          * An alternative interpretation could be: "Cannot steal enemy card since the player's row
-         * is full".
+         * is full" (see <code>ErrorType.ERROR_BOARD_ROW_FULL_ALT1</code>).
          */
         @Override
         public String interpret() {
             return "Cannot place card on table since row is full.";
+        }
+    },
+    ERROR_BOARD_ROW_FULL_ALT1 {
+        @Override
+        public String interpret() {
+            return "Cannot steal enemy card since the player's row is full";
         }
     },
     ERROR_INSUFFICIENT_MANA_FOR_HERO {
@@ -109,6 +115,12 @@ public enum ErrorType {
             return "No card available at that position.";
         }
     },
+    ERROR_CHOSEN_CARD_NOT_ENVIRONMENT {
+        @Override
+        public String interpret() {
+            return "Chosen card is not of type environment.";
+        }
+    },
     // Custom made errors
     CRITICAL_HEART_HOUND_ABILITY_NO_CARD_TO_MOVE {
         @Override
@@ -174,6 +186,12 @@ public enum ErrorType {
         @Override
         public String interpret() {
             return "CRITICAL: Warden has NO ability implemented!";
+        }
+    },
+    CRITICAL_PLACE_HERO_ON_BOARD {
+        @Override
+        public String interpret() {
+            return "CRITICAL: Cannot place hero card on table!";
         }
     };
 

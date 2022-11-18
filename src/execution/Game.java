@@ -7,7 +7,15 @@ import execution.cards.CardType;
 import execution.cards.heros.HeroCard;
 import execution.cards.minions.MinionCard;
 
+/**
+ * This class implements the whole logic of the game. It contains the two players involved, the
+ * board and other related info.
+ */
 public final class Game {
+    public static final int BOARD_COLUMNS = 5;
+    public static final int BOARD_ROWS = 4;
+    public static final int MAX_MANA_INCREMENT = 10;
+
     private final Player[] players;
     private final int initialPlayer;
     private final MinionCard[][] board;
@@ -15,10 +23,16 @@ public final class Game {
     private int manaToAdd;
     private boolean ended;
 
-    public static final int BOARD_COLUMNS = 5;
-    public static final int BOARD_ROWS = 4;
-    public static final int MAX_MANA_INCREMENT = 10;
-
+    /**
+     * This constructor creates a new Game instance.
+     * @param players the two players involved in this game
+     * @param initialPlayer the index of the first player to play a card
+     * @param playerOneDeckIdx the index of player one's deck
+     * @param playerTwoDeckIdx the index of player two's deck
+     * @param shuffleSeed the seed that will be used when shuffling the cards
+     * @param playerOneHeroCard player one's choice of hero card
+     * @param playerTwoHeroCard player two's choice of hero card
+     */
     public Game(final Player[] players, final int initialPlayer,
                 final int playerOneDeckIdx, final int playerTwoDeckIdx,
                 final int shuffleSeed,
@@ -29,8 +43,10 @@ public final class Game {
         this.initialPlayer = initialPlayer;
         this.currentPlayerTurn = initialPlayer;
         this.board = new MinionCard[BOARD_ROWS][BOARD_COLUMNS];
+        // Other default values:
         this.manaToAdd = 1;
         this.ended = false;
+        // The first round begins
         this.newRound();
     }
 
@@ -39,6 +55,7 @@ public final class Game {
      * of its cards are unfrozen and could potentially mean a new round will begin.
      */
     public void endTurn() {
+        // Each frozen aly minion should be unfrozen
         for (int row = 0; row < board.length; ++row) {
             if (isPlayersRow(players[currentPlayerTurn], row)) {
                 for (MinionCard card : board[row]) {
@@ -48,7 +65,9 @@ public final class Game {
                 }
             }
         }
+        // Let the other player play
         currentPlayerTurn = 1 - currentPlayerTurn;
+        // Check if both players had their turn, so that a new round would begin
         if (currentPlayerTurn == initialPlayer) {
             this.newRound();
         }
@@ -58,11 +77,15 @@ public final class Game {
      * Begin a new round - this means no card has attacked / used its ability yet.
      */
     public void newRound() {
+        // Increase each player's mana
         players[0].setMana(players[0].getMana() + manaToAdd);
         players[1].setMana(players[1].getMana() + manaToAdd);
+        // Increase nex round's mana portion
         manaToAdd = Math.min(manaToAdd + 1, Game.MAX_MANA_INCREMENT);
+        // Draw cards for each player
         players[0].drawCard();
         players[1].drawCard();
+        // No abilities / attacks have been spent this round so far, so reset each card's counter
         for (Card[] cards : board) {
             for (Card card : cards) {
                 if (card != null) {
@@ -156,7 +179,8 @@ public final class Game {
      */
     public boolean isTankOnEnemyLanes() {
         for (int row = 0; row < board.length; ++row) {
-            if (!isPlayersRow(players[currentPlayerTurn], row)) {
+            // Check only on enemy rows
+            if (isPlayersRow(players[1 - currentPlayerTurn], row)) {
                 for (MinionCard card : board[row]) {
                     if (card != null && card.isTank()) {
                         return true;
@@ -175,6 +199,14 @@ public final class Game {
      */
     public boolean isPlayersRow(final Player player, final int row) {
         if (checkPlayerValidity(player) && checkRowValidity(row)) {
+            // Let P1 = (player == players[1]) and P2 = (row >= Game.BOARD_ROWS / 2).
+            // Let's check out the following truth table:
+            // |  [P1]  |  [P2]  |                 Meaning               |
+            // | false  | false  | Player one asks if enemy rows are his |
+            // | false  |  true  | Player one asks if aly rows are his   |
+            // |  true  | false  | Player two asks if aly rows are his   |
+            // |  true  |  true  | Player two asks if enemy rows are his |
+            // This is why the XOR function would work great.
             return ((player == players[1]) ^ (row >= Game.BOARD_ROWS / 2));
         }
         // This should never be reached
@@ -198,6 +230,7 @@ public final class Game {
      * @return based on the success / failure of the push, an ErrorType is issued
      */
     public ErrorType pushOnBoardRow(final MinionCard minionCard, final int row) {
+        // Find the nearest empty space
         for (int i = 0; i < board[row].length; ++i) {
             if (board[row][i] == null) {
                 board[row][i] = minionCard;
@@ -214,14 +247,17 @@ public final class Game {
         for (int row = 0; row < board.length; ++row) {
             int lastUnusedColumn = 0;
             for (int column = 0; column < Game.BOARD_COLUMNS; ++column) {
+                // Consider 0 health cards as nonexistent
                 if (board[row][column] != null && board[row][column].getHealth() <= 0) {
                     board[row][column] = null;
                 }
+                // Fill the gaps
                 if (board[row][column] != null) {
                     board[row][lastUnusedColumn] = board[row][column];
                     lastUnusedColumn++;
                 }
             }
+            // Clear remaining cards
             for (int column = lastUnusedColumn; column < board[row].length; ++column) {
                 board[row][column] = null;
             }
@@ -238,12 +274,13 @@ public final class Game {
 
     /**
      * This method converts the board into a printable ArrayNode format.
-     *
      * @return the converted value
      */
     public ArrayNode boardToArrayNode() {
+        // Create the ArrayNode that will be returned
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode cardsInside = objectMapper.createArrayNode();
+        // Add each card individually
         for (MinionCard[] rowBoard : board) {
             ArrayNode cardsInsideRow = objectMapper.createArrayNode();
             for (MinionCard card : rowBoard) {
@@ -253,25 +290,8 @@ public final class Game {
             }
             cardsInside.add(cardsInsideRow);
         }
+        // Return the constructed ArrayNode
         return cardsInside;
-    }
-
-    /**
-     * This method converts the frozen cards of the board into a printable ArrayNode format.
-     *
-     * @return the converted value
-     */
-    public ArrayNode boardFrozenToArrayNode() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ArrayNode frozenCardsInside = objectMapper.createArrayNode();
-        for (MinionCard[] rowBoard : board) {
-            for (MinionCard card : rowBoard) {
-                if (card != null && card.isFrozen()) {
-                    frozenCardsInside.add(card.toObjectNode());
-                }
-            }
-        }
-        return frozenCardsInside;
     }
 
     /**
@@ -287,9 +307,11 @@ public final class Game {
                 System.out.println("CRITICAL: Both players are dead!");
                 ended = true;
             } else if (players[0].getHeroCard().getHealth() <= 0) {
+                // Player two wins
                 players[1].addVictory();
                 ended = true;
             } else if (players[1].getHeroCard().getHealth() <= 0) {
+                // Player one wins
                 players[0].addVictory();
                 ended = true;
             } else {
@@ -298,5 +320,25 @@ public final class Game {
             return true;
         }
         return true;
+    }
+
+    /**
+     * This method converts the frozen cards of the board into a printable ArrayNode format.
+     * @return the converted value
+     */
+    public ArrayNode boardFrozenToArrayNode() {
+        // Create the ArrayNode that will be returned
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode frozenCardsInside = objectMapper.createArrayNode();
+        // Add each frozen card individually
+        for (MinionCard[] rowBoard : board) {
+            for (MinionCard card : rowBoard) {
+                if (card != null && card.isFrozen()) {
+                    frozenCardsInside.add(card.toObjectNode());
+                }
+            }
+        }
+        // Return the constructed ArrayNode
+        return frozenCardsInside;
     }
 }

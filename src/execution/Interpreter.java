@@ -14,6 +14,9 @@ import fileio.Input;
 
 import java.util.ArrayList;
 
+/**
+ * This is the "big brother" that watches the games and plays them according to its rules.
+ */
 public final class Interpreter {
     private final Player[] players;
     private final ArrayList<GameInput> gameInputs;
@@ -236,12 +239,15 @@ public final class Interpreter {
     private void interpretCardUsesAttack(final ActionsInput actionsInput,
                                          final Game game,
                                          final ObjectNode objectNode) {
+        // Find attacker
         int attackerY = actionsInput.getCardAttacker().getY();
         int attackerX = actionsInput.getCardAttacker().getX();
         MinionCard attackerCard = game.getCard(attackerX, attackerY);
+        // Find attacked
         int attackedY = actionsInput.getCardAttacked().getY();
         int attackedX = actionsInput.getCardAttacked().getX();
         Card attackedCard = game.getCard(attackedX, attackedY);
+        // Try to attack
         ErrorType e = attackerCard.tryUseAttack(game, attackedCard);
         if (e != ErrorType.NO_ERROR) {
             ObjectNode cardAttacker = objectMapper.createObjectNode();
@@ -264,12 +270,15 @@ public final class Interpreter {
     private void interpretCardUsesAbility(final ActionsInput actionsInput,
                                           final Game game,
                                           final ObjectNode objectNode) {
+        // Find attacker
         int attackerY = actionsInput.getCardAttacker().getY();
         int attackerX = actionsInput.getCardAttacker().getX();
         MinionCard attackerCard = game.getCard(attackerX, attackerY);
+        // Find attacked
         int attackedY = actionsInput.getCardAttacked().getY();
         int attackedX = actionsInput.getCardAttacked().getX();
         MinionCard attackedCard = game.getCard(attackedX, attackedY);
+        // Try to use ability
         ErrorType e = attackerCard.tryUseAbility(game, attackedCard);
         if (e != ErrorType.NO_ERROR) {
             ObjectNode cardAttacker = objectMapper.createObjectNode();
@@ -292,10 +301,13 @@ public final class Interpreter {
     private void interpretUseAttackHero(final ActionsInput actionsInput,
                                         final Game game,
                                         final ObjectNode objectNode) {
+        // Find attacker
         int attackerY = actionsInput.getCardAttacker().getY();
         int attackerX = actionsInput.getCardAttacker().getX();
         MinionCard attackerCard = game.getCard(attackerX, attackerY);
+        // Find attacked
         HeroCard attackedCard = game.getNextPlayer().getHeroCard();
+        // Try to attack
         ErrorType e = attackerCard.tryUseAttack(game, attackedCard);
         if (e != ErrorType.NO_ERROR) {
             ObjectNode cardAttacker = objectMapper.createObjectNode();
@@ -344,14 +356,14 @@ public final class Interpreter {
         objectNode.put("affectedRow", actionsInput.getAffectedRow());
         objectNode.put("handIdx", actionsInput.getHandIdx());
         if (card.getCardType() != CardType.ENVIRONMENT) {
-            objectNode.put("error", "Chosen card is not of type environment.");
+            objectNode.put("error", ErrorType.ERROR_CHOSEN_CARD_NOT_ENVIRONMENT.interpret());
             output.add(objectNode);
             return;
         }
         ErrorType e = ((EnvironmentCard) card).tryUseAbility(game, actionsInput.getAffectedRow());
         if (e != ErrorType.NO_ERROR) {
             if (e == ErrorType.ERROR_BOARD_ROW_FULL) {
-                objectNode.put("error", "Cannot steal enemy card since the player's row is full.");
+                objectNode.put("error", ErrorType.ERROR_BOARD_ROW_FULL_ALT1.interpret());
                 output.add(objectNode);
             } else {
                 objectNode.put("error", e.interpret());

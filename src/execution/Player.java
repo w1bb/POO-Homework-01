@@ -10,6 +10,9 @@ import execution.cards.minions.MinionCard;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a player that will be used to play games.
+ */
 public final class Player {
     private final int playerIdx;
     private final ArrayList<Deck> decks;
@@ -19,6 +22,11 @@ public final class Player {
     private int currentMana;
     private int wins;
 
+    /**
+     * This constructor creates a new player
+     * @param playerIdx the index of this player (currently, only 0 or 1)
+     * @param decks a list of all this player's decks
+     */
     public Player(final int playerIdx, final ArrayList<Deck> decks) {
         this.playerIdx = playerIdx;
         this.decks = decks;
@@ -32,8 +40,10 @@ public final class Player {
      * @param heroCard the newly chosen hero card
      */
     public void reset(final int playerDeckId, final int shuffleSeed, final HeroCard heroCard) {
+        // Get the current deck and shuffle it
         this.currentDeck = decks.get(playerDeckId);
         this.currentDeck.shuffle(shuffleSeed);
+        // Reset the current hand, hero and mana
         this.currentHand = new ArrayList<>();
         this.currentHeroCard = heroCard;
         this.currentMana = 0;
@@ -44,6 +54,7 @@ public final class Player {
      */
     public void drawCard() {
         Card drawnCard = currentDeck.drawCard();
+        // Only add card in the hand if it exists
         if (drawnCard != null) {
             drawnCard.setOwnerIdx(this.playerIdx);
             this.currentHand.add(drawnCard);
@@ -75,12 +86,20 @@ public final class Player {
      */
     public ErrorType placeCardOnBoard(final int handIdx, final Game game) {
         Card card = getCardFromHand(handIdx);
+        // Don't allow environment cards on the board
         if (card.getCardType() == CardType.ENVIRONMENT) {
             return ErrorType.ERROR_PLACE_ENVIRONMENT_ON_BOARD;
         }
+        // Don't allow hero cards on the board
+        if (card.getCardType() == CardType.HERO) {
+            // This should never be reached
+            return ErrorType.CRITICAL_PLACE_HERO_ON_BOARD;
+        }
+        // Check if the player has enough mana to play this card
         if (this.currentMana < card.getMana()) {
             return ErrorType.ERROR_INSUFFICIENT_MANA_TO_PLACE;
         }
+        // Try to push the minion card on board
         MinionCard minionCard = (MinionCard) card;
         ErrorType e = ErrorType.NO_ERROR;
         if (minionCard.getAllowPlacementOnFrontRow()) {
@@ -116,37 +135,6 @@ public final class Player {
         return this.currentHeroCard;
     }
 
-    /**
-     * This method converts the current hand into a printable ObjectNode format.
-     *
-     * @return the converted value
-     */
-    public ArrayNode currentHandToArrayNode() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ArrayNode cardsInside = objectMapper.createArrayNode();
-        for (Card card : currentHand) {
-            cardsInside.add(card.toObjectNode());
-        }
-        return cardsInside;
-    }
-
-    /**
-     * This method converts the current hand's environment cards into a printable
-     * ObjectNode format.
-     *
-     * @return the converted value
-     */
-    public ArrayNode currentHandEnvironmentToArrayNode() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ArrayNode cardsInside = objectMapper.createArrayNode();
-        for (Card card : currentHand) {
-            if (card.getCardType() == CardType.ENVIRONMENT) {
-                cardsInside.add(card.toObjectNode());
-            }
-        }
-        return cardsInside;
-    }
-
     public Deck getCurrentDeck() {
         return currentDeck;
     }
@@ -160,5 +148,40 @@ public final class Player {
      */
     public void addVictory() {
         this.wins++;
+    }
+
+    /**
+     * This method converts the current hand into a printable ObjectNode format.
+     * @return the converted value
+     */
+    public ArrayNode currentHandToArrayNode() {
+        // Create the ArrayNode that will be returned
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode cardsInside = objectMapper.createArrayNode();
+        // Add each card individually
+        for (Card card : currentHand) {
+            cardsInside.add(card.toObjectNode());
+        }
+        // Return the constructed ArrayNode
+        return cardsInside;
+    }
+
+    /**
+     * This method converts the current hand's environment cards into a printable
+     * ObjectNode format.
+     * @return the converted value
+     */
+    public ArrayNode currentHandEnvironmentToArrayNode() {
+        // Create the ArrayNode that will be returned
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode cardsInside = objectMapper.createArrayNode();
+        // Add each environment card individually
+        for (Card card : currentHand) {
+            if (card.getCardType() == CardType.ENVIRONMENT) {
+                cardsInside.add(card.toObjectNode());
+            }
+        }
+        // Return the constructed ArrayNode
+        return cardsInside;
     }
 }
